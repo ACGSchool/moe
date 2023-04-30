@@ -93,7 +93,8 @@
     <a>恭喜你，由于您优秀的成绩，我们诚挚的邀请你来到我们学校学习。{school}一直秉承着优秀的教学理念，提供给学生一切需要的资源。我们期待你能在本校的学习过程中为社会做出贡献。</a>
     <br>
     <br>
-    <a style="font-weight: bold;">校园介绍</a>
+    <a style="font-weight: bold;">校园介绍</a><br>
+    {schoolIntroduce}
     <br>
     <br>
     <strong>您需要想办法前往二次元，这份录取才会生效~</strong>
@@ -227,46 +228,51 @@
   var applyType = filterXSS(getParams(urlparams,"applyType"))
   var schoolIntroduce;
   var schooldata;
-
+  var schoolName = filterXSS(getParams(urlparams, "school"));
   fetch("/schools.json?" + String(Date.parse(new Date()))).then(res => {
     if (res.status == 200) {
       return res.json();
     } else throw "加载学校列表失败！";
 
   }).then(data=>{
-    window.check = data
+    schoolIntroduce = data[schoolName]
+    if (schoolIntroduce===undefined){
+      $("#message_error").text("参数加载错误！")
+      $("#message_error").parent().removeClass("hidden")
+      return;
+    }
+    console.log(schoolIntroduce)
+    if (gender=="1"){
+      var gender_name = "桑"
+    }else{
+      var gender_name = "酱"
+    }
 
+
+    console.log(name)
+    if (name==="underfined" || gender==="underfined" || schoolName==="underfined"|| applyType==="underfined"){
+
+    }else{
+      var template = $("#paper").html()
+      template = template.replaceAll("{gender_name}",gender_name)
+      template = template.replaceAll("{applyID}","受験者"+parseInt(Math.random() * (1068 - 1000 + 1) + 1000))
+      template = template.replaceAll("{date}",getTime())
+      template = template.replaceAll("{school}",schoolName)
+      template = template.replaceAll("{name}",name)
+      template = template.replaceAll("{applyType}",selectType(applyType))
+      if (schoolIntroduce.introduce==undefined || schoolIntroduce.introduce==null){
+        introduce = "暂无介绍"
+      }else{
+        introduce = schoolIntroduce.introduce
+      }
+      template = template.replaceAll("{schoolIntroduce}",introduce)
+      $("#paper").html(template)
+      $("#paper").removeClass("hidden");
+      $("#paper_save").removeClass("hidden");
+      console.log(template)
+    }
   })
-  console.log(window.check)
 
-  if (schoolIntroduce===undefined){
-    $("#message_error").text("参数加载错误！")
-    $("#message_error").parent().removeClass("hidden")
-    throw "加载学校列表失败！";
-  }
-  if (gender=="1"){
-    var gender_name = "桑"
-  }else{
-    var gender_name = "酱"
-  }
-
-  var schoolName = filterXSS(getParams(urlparams, "school"));
-  console.log(name)
-  if (name==="underfined" || gender==="underfined" || schoolName==="underfined"|| applyType==="underfined"){
-
-  }else{
-    var template = $("#paper").html()
-    template = template.replaceAll("{gender_name}",gender_name)
-    template = template.replaceAll("{applyID}","受験者"+parseInt(Math.random() * (1068 - 1000 + 1) + 1000))
-    template = template.replaceAll("{date}",getTime())
-    template = template.replaceAll("{school}",schoolName)
-    template = template.replaceAll("{name}",name)
-    template = template.replaceAll("{applyType}",selectType(applyType))
-    $("#paper").html(template)
-    $("#paper").removeClass("hidden");
-    $("#paper_save").removeClass("hidden");
-    console.log(template)
-  }
 
 </script>
 <script>
