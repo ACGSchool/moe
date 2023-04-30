@@ -54,35 +54,42 @@
   </nav>
 
 </header>
-
+<style>
+  .hidden{
+    display: none;
+  }
+</style>
 
 <div class="container">
   <h2 style="margin-top: 5px;">申请详情</h2>
   <div>
     <a style="color: red;">生成的通知仅供娱乐</a>
-    <div class="alert alert-dismissible alert-success">
+    <div id="success" class="alert alert-dismissible alert-success hidden">
       <strong>恭喜您被xxxxxx录取</strong></div>
   </div>
+  <div class="alert alert-dismissible alert-danger hidden">
+    <strong id="message_error"></strong></div>
+
   <div style="text-align: right;">
-    <button class="btn btn-primary mb-3" type="submit" onclick="CreatImg()">保存图片</button>
+    <button class="btn btn-primary mb-3 hidden" id="paper_save" type="submit" onclick="CreatImg()">保存图片</button>
   </div>
 
-  <div id="paper" class="mb-3" style="width: 100%;border: 1px solid #ced4da;border-radius: 5px;padding: 5px;">
-    <p>亲爱的 xxxx酱</p>
+  <div id="paper" ref="paper" class="mb-3 hidden" style="width: 100%;border: 1px solid #ced4da;border-radius: 5px;padding: 5px;">
+    <p>亲爱的 {name}{gender_name}</p>
     <p>申请编号: {applyID}</p>
     <br>
-    <a>恭喜你，由于您优秀的成绩，我们诚挚的邀请你来到我们学校学习。</a>
+    <a>恭喜你，由于您优秀的成绩，我们诚挚的邀请你来到我们学校学习。{school}一直秉承着优秀的教学理念，提供给学生一切需要的资源。我们期待你能在本校的学习过程中为社会做出贡献。</a>
     <br>
     <br>
     <a style="font-weight: bold;">校园介绍</a>
     <br>
     <br>
-    <a>您需要想办法前往二次元，这份录取才会生效~</a>
+    <strong>您需要想办法前往二次元，这份录取才会生效~</strong>
     <br>
     <br>
-    <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
-    <p style="text-align: right;">大洗女子学园</p>
-    <p style="text-align: right;">2023年4月30日</p>
+    <br> <br> <br> <br> <br>  <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+    <p style="text-align: right;">{school}</p>
+    <p style="text-align: right;">{date}</p>
 
 
 
@@ -93,9 +100,11 @@
     <strong>请注意，该网站所有内容仅供娱乐</strong>
   </div>
 </div>
+</div>
+
 
 <footer style="background: #ee7e94;color:white;font-weight: 700;font-size: 14px;margin-top: 50px;">
-  <div class="container">
+  <div id="test" class="container">
     <div class="row">
       <div class="col-md-7 footer-address">
         <div style="color:white;">
@@ -122,10 +131,10 @@
   </div>
 </footer>
 </body>
-
+<script src="xss.js"></script>
 <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js"></script>
 <script src="bootstrap.min.js"></script>
-<script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.staticfile.org/html2canvas/1.4.1/html2canvas.js"></script>
 <style>
   @media (min-width: 992px)
   {
@@ -144,37 +153,7 @@
   //         cover: 'cover.jpg'
   //     }]
   // });
-  function CreatImg() {
-    console.log('test');
-    html2canvas(document.getElementById('paper'), {
-      onrendered: function(canvas) {
-        // 创建一个canvas
-        // document.body.appendChild(canvas);
-        dataUrl=canvas.toDataURL("image/jpeg", 1.0);
-        DownLoadImg(dataUrl.replace("data:image/jpeg;base64,", ""))
-      },
-    });
-  }
 
-  function DownLoadImg(content){
-    // 格式
-    var imageType='png';
-    // 文件名
-    var fileName=Date.now();
-    var raw = window.atob(content);
-    var rawLength = raw.length;
-    var uInt8Array = new Uint8Array(rawLength);
-    for(var i = 0; i < rawLength; ++i) {
-      uInt8Array[i] = raw.charCodeAt(i);
-    }
-    var blob = new Blob([uInt8Array], {type:'image/'+imageType});
-    var aLink = document.createElement('a');
-    var evt = document.createEvent("HTMLEvents");
-    evt.initEvent("click", true, true);
-    aLink.download = fileName;
-    aLink.href = URL.createObjectURL(blob);
-    aLink.click();
-  }
 
   var date = new Date();
   moth = date.getUTCMonth()+1;
@@ -190,5 +169,89 @@
     apply_text = "入学年:"+(year+1)+".4月";
   }
   $("#apply").text(apply_text)
+</script>
+<script>
+  function getParams(params,key){
+    if(params.has(key)){
+      return params.get(key)
+    }
+    $("#message_error").text("参数请求错误！")
+    $("#message_error").parent().removeClass("hidden")
+    return "underfined";
+
+
+  }
+  function getTime(){
+    year = date.getFullYear();
+    moth = date.getMonth()+1;
+    day = date.getDate();
+
+    if(moth<10){
+      moth = `0${moth}`
+    }
+    if(day<10){
+      day = `0${day}`
+    }
+    return `${year}年${moth}月${day}日`
+  }
+  const urlparams = new URL(window.location.href).searchParams
+  var name = filterXSS(getParams(urlparams, "name"));
+  var gender = filterXSS(getParams(urlparams, "gender"));
+
+  if (gender=="1"){
+    var gender_name = "桑"
+  }else{
+    var gender_name = "酱"
+  }
+  var schoolName = filterXSS(getParams(urlparams, "school"));
+  console.log(name)
+  if (name==="underfined" || gender==="underfined" || schoolName==="underfined"){
+
+  }else{
+    var template = $("#paper").html()
+    template = template.replaceAll("{gender_name}",gender_name)
+    template = template.replaceAll("{applyID}","受験者"+parseInt(Math.random() * (1068 - 1000 + 1) + 1000))
+    template = template.replaceAll("{date}",getTime())
+    template = template.replaceAll("{school}",schoolName)
+    template = template.replaceAll("{name}",name)
+    $("#paper").html(template)
+    $("#paper").removeClass("hidden");
+    $("#paper_save").removeClass("hidden");
+    console.log(template)
+  }
+
+</script>
+<script>
+  function CreatImg() {
+    var element = $("#paper");
+    window.devicePixelRatio = 5;
+    html2canvas(document.querySelector("#paper")).then(canvas=>{
+      // document.body.appendChild(canvas)
+      dataUrl=canvas.toDataURL("image/jpeg", 1.0);
+      DownLoadImg(dataUrl.replace("data:image/jpeg;base64,", ""))
+    });
+  }
+
+  function DownLoadImg(content){
+    // 格式
+    var imageType='png';
+
+    // 文件名
+    var fileName=Date.now();
+    var raw = window.atob(content);
+    var rawLength = raw.length;
+    var uInt8Array = new Uint8Array(rawLength);
+    for(var i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+    var blob = new Blob([uInt8Array], {type:'image/'+imageType});
+    var aLink = document.createElement('a');
+    var evt = document.createEvent("HTMLEvents");
+    evt.initEvent("click", true, true);
+    aLink.download = "录取详情_"+fileName;
+    aLink.href = URL.createObjectURL(blob);
+    aLink.click();
+
+  }
 </script>
 </html>
