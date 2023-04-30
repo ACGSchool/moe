@@ -16,7 +16,7 @@ fetch("schools.json?" + String(Date.parse(new Date()))).then(res => {
         th.scope = "row";
         tr.appendChild(th);
         for (let j in data[i]) {
-            if (j in ["time", "task", "type", "url"]) {
+            if (["time", "task", "type", "url"].includes(j)) {
                 let td = document.createElement("td");
                 if (!data[i][j]) data[i][j] = "-";
                 td.innerHTML = data[i][j];
