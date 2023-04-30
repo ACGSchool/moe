@@ -1,4 +1,4 @@
-fetch("schools.json" + String(Date.parse(new Date()))).then(res => {
+fetch("schools.json?" + String(Date.parse(new Date()))).then(res => {
     if (res.status == 200) {
         return res.json();
     } else throw "加载学校列表失败！";
