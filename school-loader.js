@@ -16,10 +16,12 @@ fetch("schools.json?" + String(Date.parse(new Date()))).then(res => {
         th.scope = "row";
         tr.appendChild(th);
         for (let j in data[i]) {
-            let td = document.createElement("td");
-            if (!data[i][j]) data[i][j] = "-";
-            td.innerHTML = data[i][j];
-            tr.appendChild(td);
+            if (j in ["time", "task", "type", "url"]) {
+                let td = document.createElement("td");
+                if (!data[i][j]) data[i][j] = "-";
+                td.innerHTML = data[i][j];
+                tr.appendChild(td);
+            }
         }
         tbody.append(tr);
     }
