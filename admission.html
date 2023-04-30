@@ -58,6 +58,17 @@
   .hidden{
     display: none;
   }
+  #paper{
+
+    background: url("school.png");
+    background-repeat: no-repeat;
+    background-size: 200px;
+    background-position: right bottom;
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+  }
 </style>
 
 <div class="container">
@@ -74,9 +85,10 @@
     <button class="btn btn-primary mb-3 hidden" id="paper_save" type="submit" onclick="CreatImg()">保存图片</button>
   </div>
 
-  <div id="paper" ref="paper" class="mb-3 hidden" style="width: 100%;border: 1px solid #ced4da;border-radius: 5px;padding: 5px;">
+  <div id="paper" ref="paper" class="mb-3 hidden" style="height:100%;width: 100%;border: 1px solid #ced4da;border-radius: 5px;padding: 30px;">
     <p>亲爱的 {name}{gender_name}</p>
     <p>申请编号: {applyID}</p>
+    <p>申请身份: {applyType}</p>
     <br>
     <a>恭喜你，由于您优秀的成绩，我们诚挚的邀请你来到我们学校学习。{school}一直秉承着优秀的教学理念，提供给学生一切需要的资源。我们期待你能在本校的学习过程中为社会做出贡献。</a>
     <br>
@@ -87,7 +99,8 @@
     <strong>您需要想办法前往二次元，这份录取才会生效~</strong>
     <br>
     <br>
-    <br> <br> <br> <br> <br>  <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+    <br> <br> <br> <br> <br>  <br> <br> <br>  <br> <br> <br>  <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<!--    <img style="float:right;bottom: 0;position:relative;" src="img.png">-->
     <p style="text-align: right;">{school}</p>
     <p style="text-align: right;">{date}</p>
 
@@ -181,6 +194,20 @@
 
 
   }
+  function selectType(id){
+    switch (applyType){
+      case "0":
+        return "本国生"
+      case "1":
+        return "国外生"
+      case "2":
+        return "复读生"
+      case "3":
+        return "转校生"
+      default:
+        return "本国生"
+    }
+  }
   function getTime(){
     year = date.getFullYear();
     moth = date.getMonth()+1;
@@ -197,15 +224,35 @@
   const urlparams = new URL(window.location.href).searchParams
   var name = filterXSS(getParams(urlparams, "name"));
   var gender = filterXSS(getParams(urlparams, "gender"));
+  var applyType = filterXSS(getParams(urlparams,"applyType"))
+  var schoolIntroduce;
+  var schooldata;
 
+  fetch("/schools.json?" + String(Date.parse(new Date()))).then(res => {
+    if (res.status == 200) {
+      return res.json();
+    } else throw "加载学校列表失败！";
+
+  }).then(data=>{
+    window.check = data
+
+  })
+  console.log(window.check)
+
+  if (schoolIntroduce===undefined){
+    $("#message_error").text("参数加载错误！")
+    $("#message_error").parent().removeClass("hidden")
+    throw "加载学校列表失败！";
+  }
   if (gender=="1"){
     var gender_name = "桑"
   }else{
     var gender_name = "酱"
   }
+
   var schoolName = filterXSS(getParams(urlparams, "school"));
   console.log(name)
-  if (name==="underfined" || gender==="underfined" || schoolName==="underfined"){
+  if (name==="underfined" || gender==="underfined" || schoolName==="underfined"|| applyType==="underfined"){
 
   }else{
     var template = $("#paper").html()
@@ -214,6 +261,7 @@
     template = template.replaceAll("{date}",getTime())
     template = template.replaceAll("{school}",schoolName)
     template = template.replaceAll("{name}",name)
+    template = template.replaceAll("{applyType}",selectType(applyType))
     $("#paper").html(template)
     $("#paper").removeClass("hidden");
     $("#paper_save").removeClass("hidden");
