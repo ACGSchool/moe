@@ -55,7 +55,11 @@
 
 </header>
 
-
+<style>
+    .hidden{
+        display: none;
+    }
+</style>
 <div class="container">
     <h2 style="margin-top: 5px;">入学申请</h2>
     <p style="color: red;">请避免填写真实信息</p>
@@ -65,9 +69,10 @@
                 <option disabled selected>申请学校名称</option>
             </select>
         </div>
-        <div id="requirement" class="mb-3" style="width: 100%;white-space: pre-line;border: 1px solid #ced4da;border-radius: 5px;padding: 5px;">
-            <h2 style="text-align: center;">xxxx入学情报</h2>
-            欢迎入学本校，本校是唯一一所提供战车道培训的学校
+        <div id="requirement" class="mb-3 hidden" style="width: 100%;white-space: pre-line;border: 1px solid #ced4da;border-radius: 5px;padding: 5px;">
+            <h2 style="text-align: center;" >{school}入学要求</h2>
+            {requirement}
+
         </div>
         <div class="input-group mb-3">
             <input required type="text" id="apply_name" class="form-control" placeholder="请输入申请人"  aria-label="申请人" style="margin-right: 10px;">
@@ -172,8 +177,10 @@
         } else throw "加载学校列表失败！";
 
     }).then(data=>{
+        window.data = data
         for(let i in data){
             $("#schoolList").append(`<option value="${i}">${i}</option>`)
+
         }
 
     })
@@ -190,7 +197,7 @@
     moth = date.getUTCMonth()+1;
     year = date.getFullYear();
     var apply_text;
-
+    var temp2 = null;
     console.log(moth)
     if(moth<=4){
         apply_text="本季度招生已结束"
@@ -200,5 +207,29 @@
         apply_text = "入学年:"+(year+1)+".4月";
     }
     $("#apply").text(apply_text)
+    $("#schoolList").change(()=>{
+        schoolname = $("#schoolList").val()
+        tempdata = window.data[schoolname]
+
+
+        temp = $("#requirement").html()
+        if(temp2!=null){
+            temp = temp2
+        }else{
+            temp2 = temp
+        }
+
+        if(tempdata.task==undefined || tempdata.task==""){
+            tasktext = "无"
+        }else{
+            tasktext = tempdata.task
+        }
+        temp = temp.replaceAll("{requirement}","申请要求:"+tasktext)
+        temp = temp.replaceAll("{school}",schoolname)
+        $("#requirement").html(temp)
+        $("#requirement").removeClass("hidden")
+        console.log(data)
+    })
+
 </script>
 </html>
