@@ -12,6 +12,8 @@
     align-items:center;
 }
 .toasts {
+    opacity:1;
+    max-width:initial;
     font-family:'Poppins', sans-serif;
     padding:0;
     margin:0;
