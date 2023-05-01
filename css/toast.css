@@ -12,8 +12,6 @@
     align-items:center;
 }
 .toasts {
-    opacity:1;
-    max-width:initial;
     font-family:'Poppins', sans-serif;
     padding:0;
     margin:0;
@@ -24,6 +22,8 @@
     z-index:100;
 }
 .toasts .toast {
+    opacity:1;
+    max-width:initial;
     width:400px;
     list-style:none;
     position:relative;
