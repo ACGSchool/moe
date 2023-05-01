@@ -326,11 +326,11 @@
 
   }).then(data=>{
     schoolIntroduce = data[schoolName]
-    if (schoolIntroduce===undefined){
-      $("#message_error").text("参数加载错误！")
-      $("#message_error").parent().removeClass("hidden")
-      return;
-    }
+    // if (schoolIntroduce===undefined){
+    //   $("#message_error").text("参数加载错误！")
+    //   $("#message_error").parent().removeClass("hidden")
+    //   return;
+    // }
     console.log(schoolIntroduce)
     if (gender=="1"){
       var gender_name = "桑"
@@ -360,16 +360,24 @@
       template = template.replaceAll("{school}",schoolName)
       template = template.replaceAll("{name}",name)
       template = template.replaceAll("{applyType}",selectType(applyType))
-      if (schoolIntroduce.introduce==undefined || schoolIntroduce.introduce==null){
+      if (schoolIntroduce===undefined)
+      {
+
+        logo = "logo/音乃木板.png"
         introduce = "暂无介绍"
       }else{
-        introduce = schoolIntroduce.introduce
+        if (schoolIntroduce.introduce==undefined || schoolIntroduce.introduce==null){
+          introduce = "暂无介绍"
+        }else{
+          introduce = schoolIntroduce.introduce
+        }
+        if (schoolIntroduce.logo==undefined || schoolIntroduce.logo==null){
+          logo = "logo/音乃木板.png"
+        }else{
+          logo = "logo/"+schoolIntroduce.logo
+        }
       }
-      if (schoolIntroduce.logo==undefined || schoolIntroduce.logo==null){
-        logo = "logo/音乃木板.png"
-      }else{
-        logo = "logo/"+schoolIntroduce.logo
-      }
+
 
       template = template.replaceAll("{schoolIntroduce}",introduce)
       $("#paper").html(template)
