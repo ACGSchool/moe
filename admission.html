@@ -76,8 +76,11 @@
   <div>
     <a style="color: red;">生成的通知仅供娱乐</a>
     <div id="success" class="alert alert-dismissible alert-success hidden">
-      <strong>恭喜您被xxxxxx录取</strong></div>
+      <strong id="success_message"></strong></div>
+    <div class="alert alert-dismissible alert-warning hidden">
+      <strong id="failed_message"></strong></div>
   </div>
+
   <div class="alert alert-dismissible alert-danger hidden">
     <strong id="message_error"></strong></div>
 
@@ -86,9 +89,15 @@
   </div>
 
   <div id="paper" ref="paper" class="mb-3 hidden" style="height:100%;width: 100%;border: 1px solid #ced4da;border-radius: 5px;padding: 30px;">
-    <p>亲爱的 {name}{gender_name}</p>
+    <h5>ACG教育委員会录取通知</h5>
+    <p>{school} 招生委员会 - From admission@moe.acg.school</p>
+    <img src="img.png" width="100" style="display: inline-block;"><div style="border: 2px solid black;display: inline-block;height: 100px;margin-bottom: -43px;"></div>
+    <div style="display: inline-block;font-size: 30px;">{school}</div>
+    <hr>
     <p>申请编号: {applyID}</p>
     <p>申请身份: {applyType}</p>
+    <br>
+    <p>亲爱的 {name}{gender_name}</p>
     <br>
     <a>恭喜你，由于您优秀的成绩，我们诚挚的邀请你来到我们学校学习。{school}一直秉承着优秀的教学理念，提供给学生一切需要的资源。我们期待你能在本校的学习过程中为社会做出贡献。</a>
     <br>
@@ -97,7 +106,7 @@
     {schoolIntroduce}
     <br>
     <br>
-    <strong>您需要想办法前往二次元，这份录取才会生效~</strong>
+    <strong style="color: red;">您需要想办法前往二次元，这份录取才会生效~</strong>
     <br>
     <br>
     <br> <br> <br> <br> <br>  <br> <br> <br>  <br> <br> <br>  <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
@@ -110,6 +119,25 @@
 
 
   </div>
+  <div id="failed" class="hidden">
+    <p>亲爱的 {name}{gender_name}</p>
+    <p>申请编号: {applyID}</p>
+    <p>申请身份: {applyType}</p>
+    <br>
+    <a>抱歉您未到达{school}录取的条件，给您带来的不便我们深感歉意。</a>
+    <br>
+    <br>
+    <a style="font-weight: bold;">校园介绍</a><br>
+    {schoolIntroduce}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br> <br> <br> <br> <br>  <br> <br> <br>  <br> <br> <br>  <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+    <!--    <img style="float:right;bottom: 0;position:relative;" src="img.png">-->
+    <p style="text-align: right;">{school}</p>
+    <p style="text-align: right;">{date}</p>
+    </div>
   <div class="alert alert-dismissible alert-danger">
     <strong>请注意，该网站所有内容仅供娱乐</strong>
   </div>
@@ -254,6 +282,15 @@
 
     }else{
       var template = $("#paper").html()
+      var random = parseInt(Math.random()*(100-1+1)+1)
+      if(random<=50){
+        template = $("#failed").html()
+        $("#failed_message").text("很抱歉您未被"+schoolName+"录取")
+        $("#failed_message").parent().removeClass("hidden")
+      }else{
+        $("#success_message").text("恭喜你被"+schoolName+"录取")
+        $("#success_message").parent().removeClass("hidden")
+      }
       template = template.replaceAll("{gender_name}",gender_name)
       template = template.replaceAll("{applyID}","受験者"+parseInt(Math.random() * (1068 - 1000 + 1) + 1000))
       template = template.replaceAll("{date}",getTime())
