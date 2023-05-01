@@ -22,8 +22,8 @@
     z-index:100;
 }
 .toasts .toast {
-    opacity:1;
-    max-width:initial;
+    opacity:1 !important;
+    max-width:initial !important;
     width:400px;
     list-style:none;
     position:relative;
@@ -48,6 +48,7 @@
     margin-left:12px;
 }
 .toast.hide {
+    display:initial !important;
     animation:hide_toast 0.3s forwards;
 }
 .toast i:last-child {
