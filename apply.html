@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>入学申请-ACG教育委員会</title>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <!-- 引入Font Awesome图标库 -->
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <!-- 引入Toast消息组件 -->
-    <link rel="stylesheet" href="./css/toast.css">
-    <script src="./js/toast.js" defer></script>
-
 
 </head>
 <body>
@@ -74,6 +68,11 @@
             <select required class="form-control" id="schoolList" width="50%">
                 <option disabled selected>申请学校名称</option>
             </select>
+        </div>
+        <div id="requirement" class="mb-3 hidden" style="width: 100%;white-space: pre-line;border: 1px solid #ced4da;border-radius: 5px;padding: 5px;">
+            <h2 style="text-align: center;" >{school}入学要求</h2>
+            {requirement}
+
         </div>
         <div class="input-group mb-3">
             <input required type="text" id="apply_name" class="form-control" placeholder="请输入申请人"  aria-label="申请人" style="margin-right: 10px;">
@@ -155,21 +154,22 @@
         var gender = $("input[name='gender']:checked").val()
         var studentType = $("#studentType").val()
         if (studentType==null){
-            createToast("error", "请选择入学身份", true, 3)
+            alert("请选择入学身份")
             return
         }
         var application = $("#apply_name").val()
         if (application==""){
-            createToast("error", "请填写申请人名字", true, 3)
+            alert("请填写申请人名字")
             return
         }
         var school = $("#schoolList").val()
         if (school==null){
-            createToast("error", "请选择申请学校", true, 3)
+            alert("请选择申请学校")
             return
         }
 
-        createToast("success", `申请已经提交！<a href="admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}" style="color: var(--success);">点击查看申请结果</a>`)
+        alert("申请已经提交，点击查看申请结果")
+        window.location = `admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}`
     }
     fetch("/schools.json?" + String(Date.parse(new Date()))).then(res => {
         if (res.status == 200) {
@@ -224,7 +224,7 @@
         }else{
             tasktext = tempdata.task
         }
-        createToast("info", "申请要求: <br>"+tasktext, true, 10)
+        temp = temp.replaceAll("{requirement}","申请要求:"+tasktext)
         temp = temp.replaceAll("{school}",schoolname)
         $("#requirement").html(temp)
         $("#requirement").removeClass("hidden")
