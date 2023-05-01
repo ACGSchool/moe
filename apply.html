@@ -72,11 +72,6 @@
         <div class="input-group mb-3 hidden">
             <input required type="text" id="school_name" value="" class="form-control" placeholder="请输入学校名称"  aria-label="学校" style="margin-right: 10px;">
         </div>
-        <div id="requirement" class="mb-3 hidden" style="width: 100%;white-space: pre-line;border: 1px solid #ced4da;border-radius: 5px;padding: 5px;">
-            <h2 style="text-align: center;" >{school}入学要求</h2>
-            {requirement}
-
-        </div>
         <div class="input-group mb-3">
             <input required type="text" id="apply_name" class="form-control" placeholder="请输入申请人"  aria-label="申请人" style="margin-right: 10px;">
             <select required class="form-control" id="studentType" >
@@ -159,32 +154,30 @@
         var gender = $("input[name='gender']:checked").val()
         var studentType = $("#studentType").val()
         if (studentType==null){
-            alert("请选择入学身份")
+            createToast("error", "请选择入学身份", true, 3)
             return
         }
         var application = $("#apply_name").val()
         if (application==""){
-            alert("请填写申请人名字")
+            createToast("error", "请填写申请人名字", true, 3)
             return
         }
         var school = $("#schoolList").val()
         if (school==null){
-            alert("请选择申请学校")
+            createToast("error", "请选择申请学校", true, 3)
             return
         }
         var custom = $("#school_name").val()
         if($("#school_name").parent().hasClass("hidden")===false){
             if (custom==null || custom == undefined || custom==""){
-                alert("请填写申请学校名")
+                createToast("error", "请填写申请学校名", true, 3)
                 return;
             }
             console.log(custom)
             school = custom
         }
 
-
-        alert("申请已经提交，点击查看申请结果")
-        window.location = `admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}`
+        createToast("success", `申请已经提交！<a href="admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}" style="color: var(--success);">点击查看申请结果</a>`)
     }
     fetch("/schools.json?" + String(Date.parse(new Date()))).then(res => {
         if (res.status == 200) {
@@ -227,29 +220,17 @@
         schoolname = $("#schoolList").val()
         if (schoolname=="other"){
             $("#school_name").parent().removeClass("hidden")
-            $("#requirement").addClass("hidden")
         }else{
             $("#school_name").parent().addClass("hidden")
         }
         tempdata = window.data[schoolname]
-
-
-        temp = $("#requirement").html()
-        if(temp2!=null){
-            temp = temp2
-        }else{
-            temp2 = temp
-        }
 
         if(tempdata.task==undefined || tempdata.task==""){
             tasktext = "无"
         }else{
             tasktext = tempdata.task
         }
-        temp = temp.replaceAll("{requirement}","申请要求:"+tasktext)
-        temp = temp.replaceAll("{school}",schoolname)
-        $("#requirement").html(temp)
-        $("#requirement").removeClass("hidden")
+        createToast("info", "<b style='color: var(--info);'>"+schoolname+"入学要求</b><br>"+tasktext, true, 10)
         console.log(data)
     })
 
