@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>结果查询-ACG教育委員会</title>
+  <title>入学申请-ACG教育委員会</title>
   <link rel="stylesheet" href="bootstrap.min.css">
 
 </head>
@@ -94,7 +94,7 @@
   <div id="paper" ref="paper" class="mb-3 hidden" style="height:100%;width: 100%;border: 1px solid #ced4da;border-radius: 5px;padding: 30px;">
     <h5>ACG教育委員会录取通知</h5>
     <p>{school} 招生委员会 - From admission@moe.acg.school</p>
-    <img src="img.png" width="100" style="display: inline-block;"><div id="line" style="border: 2px solid black;display: inline-block;height: 100px;margin-bottom: -43px;"></div>
+    <img id="school_logo" src="" width="100" style="display: inline-block;"><div id="line" style="border: 2px solid black;display: inline-block;height: 100px;margin-bottom: -43px;"></div>
     <div style="display: inline-block;font-size: 30px;" id="school_name">{school}</div>
     <hr>
     <p>申请编号: {applyID}</p>
@@ -365,8 +365,15 @@
       }else{
         introduce = schoolIntroduce.introduce
       }
+      if (schoolIntroduce.logo==undefined || schoolIntroduce.logo==null){
+        logo = "logo/音乃木板.png"
+      }else{
+        logo = "logo/"+schoolIntroduce.logo
+      }
+
       template = template.replaceAll("{schoolIntroduce}",introduce)
       $("#paper").html(template)
+      $("#school_logo").attr("src",logo)
       $("#paper").removeClass("hidden");
       $("#paper_save").removeClass("hidden");
       console.log(template)
