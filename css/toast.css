@@ -48,7 +48,7 @@
     margin-left:12px;
 }
 .toast.hide {
-    display:block !important;
+    display:flex !important;
     animation:hide_toast 0.3s forwards;
 }
 .toast i:last-child {
