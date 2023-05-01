@@ -69,6 +69,9 @@
                 <option disabled selected>申请学校名称</option>
             </select>
         </div>
+        <div class="input-group mb-3 hidden">
+            <input required type="text" id="school_name" value="" class="form-control" placeholder="请输入学校名称"  aria-label="学校" style="margin-right: 10px;">
+        </div>
         <div id="requirement" class="mb-3 hidden" style="width: 100%;white-space: pre-line;border: 1px solid #ced4da;border-radius: 5px;padding: 5px;">
             <h2 style="text-align: center;" >{school}入学要求</h2>
             {requirement}
@@ -148,6 +151,8 @@
             width: 970px;
         }
     }
+
+
 </style>
 <script>
     function submit(){
@@ -167,6 +172,16 @@
             alert("请选择申请学校")
             return
         }
+        var custom = $("#school_name").val()
+        if($("#school_name").parent().hasClass("hidden")===false){
+            if (custom==null || custom == undefined || custom==""){
+                alert("请填写申请学校名")
+                return;
+            }
+            console.log(custom)
+            school = custom
+        }
+
 
         alert("申请已经提交，点击查看申请结果")
         window.location = `admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}`
@@ -182,6 +197,7 @@
             $("#schoolList").append(`<option value="${i}">${i}</option>`)
 
         }
+        $("#schoolList").append(`<option value="other">其他学校(自定义)</option>`)
 
     })
     // const ap = new APlayer({
@@ -209,6 +225,12 @@
     $("#apply").text(apply_text)
     $("#schoolList").change(()=>{
         schoolname = $("#schoolList").val()
+        if (schoolname=="other"){
+            $("#school_name").parent().removeClass("hidden")
+            $("#requirement").addClass("hidden")
+        }else{
+            $("#school_name").parent().addClass("hidden")
+        }
         tempdata = window.data[schoolname]
 
 
