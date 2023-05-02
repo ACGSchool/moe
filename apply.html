@@ -46,11 +46,11 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="#">教育方针</a>
-                            <a class="dropdown-item" href="#">政策文件</a>
+                            <a class="dropdown-item" href="policy.html">政策文件</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link">关于我们</a>
+                        <a class="nav-link" href="about.html">关于我们</a>
                     </li>
                 </ul>
             </div>
@@ -91,14 +91,14 @@
         <div class="input-group">
 
             <p>性别:</p>
-                <div class="custom-control custom-radio" style="margin-right: 5px;">
-                    <input type="radio" id="boy" value="1" name="gender" class="custom-control-input" checked="">
-                    <label class="custom-control-label"  for="boy">男</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" id="girl" value="0" name="gender" class="custom-control-input">
-                    <label class="custom-control-label" for="girl">女</label>
-                </div>
+            <div class="custom-control custom-radio" style="margin-right: 5px;">
+                <input type="radio" id="boy" value="1" name="gender" class="custom-control-input" checked="">
+                <label class="custom-control-label"  for="boy">男</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="girl" value="0" name="gender" class="custom-control-input">
+                <label class="custom-control-label" for="girl">女</label>
+            </div>
 
         </div>
 
@@ -106,7 +106,7 @@
             <span class="input-group-text">申请理由</span>
             <textarea class="form-control" aria-label="With textarea" placeholder="非必要"></textarea>
         </div>
-        <button class="btn btn-primary mb-3" type="submit" onclick="submit()">提交申请</button>
+        <button id="submit" class="btn btn-primary mb-3" type="submit" onclick="submit()">提交申请</button>
     </div>
     <div class="alert alert-dismissible alert-danger">
         <strong>请注意，该网站所有内容仅供娱乐</strong>
@@ -178,11 +178,13 @@
                 createToast("error", "请填写申请学校名", true, 3)
                 return;
             }
-            console.log(custom)
+            // console.log(custom)
             school = custom
         }
 
         createToast("success", `申请已经提交！<a href="admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}" style="color: var(--success);">点击查看申请结果</a>`)
+        $("#submit").addClass("disabled");
+        $("#submit").attr("disabled",true);
     }
     fetch("/schools.json?" + String(Date.parse(new Date()))).then(res => {
         if (res.status == 200) {

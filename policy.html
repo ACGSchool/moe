@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>入学申请-ACG教育委員会</title>
+  <title>ACG教育委員会</title>
   <link rel="stylesheet" href="bootstrap.min.css">
 
 </head>
@@ -41,7 +41,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">教育方针</a>
-              <a class="dropdown-item" href="policy.html">政策文件</a>
+              <a class="dropdown-item" href="#">政策文件</a>
             </div>
           </li>
           <li class="nav-item">
@@ -55,107 +55,126 @@
 
 </header>
 <style>
-  .hidden{
-    display: none!important;
+  .footer{
+    bottom: 0;
+    position: absolute;
+    font-size: 20px;
   }
-  #paper{
-
-    background: url("school.png");
-    background-repeat: no-repeat;
-    background-size: 200px;
-    background-position: right bottom;
-    width: 100%;
-    height: 100%;
+  .sidebar{
+    border: 4px solid #ffc0cb;
+  }
+  .sidebar ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar > ul > li>a:hover{
+    background-color: white!important;
+    color: black;
+  }
+  .sidebar > ul > li >a{
+    font-weight: 600;
+    display: block;
     position: relative;
-
+    padding: 10px;
+    color: white;
+    background: #ffc0cb;
+    text-decoration: underline;
+    border-bottom: 1px solid white;
+  }
+  .sidebar > ul > li > ul > li >a{
+    font-weight: 600;
+    display: block;
+    position: relative;
+    padding: 10px;
+    color: darkblue;
+    background: white;
+    text-decoration: underline;
+    border-bottom: 1px solid white;
+  }
+  .green-border{
+    border-bottom: 4px solid #ffc0cb!important;
+  }
+  @media (max-width: 735px) {
+    .sidebar{
+      width: 100%;
+    }
+  }
+  @media (max-width: 575px) {
+    .row{
+      flex-direction: column-reverse;
+    }
+  }
+  .notice{
+    padding: 10px;
+    background: #ffc0cb;
+    color: darkblue;
+    text-decoration: underline;
+  }
+  .ul>li{
+    text-decoration: underline;
+    color: darkblue;
   }
 </style>
 
 <div class="container">
-  <h2 style="margin-top: 5px;">申请详情</h2>
-  <div>
-    <a style="color: red;">生成的通知仅供娱乐</a>
-    <div id="success" class="alert alert-dismissible alert-success hidden">
-      <strong id="success_message"></strong></div>
-    <div class="alert alert-dismissible alert-warning hidden">
-      <strong id="failed_message"></strong></div>
+  <div class="col-xs-12" style="padding-top: 10px;padding-bottom: 10px;">
+    <img style="max-width: 100%;min-width: 100%;" height="auto;" src="tari2.png">
   </div>
 
-  <div class="alert alert-dismissible alert-danger hidden">
-    <strong id="message_error"></strong></div>
 
-  <label class="hidden" id="upload_profile_layout">上传头像(可选):<input type="file" class="form-control-file" id="upload_profile" aria-describedby="fileHelp"></label>
+  <div class="row">
+    <div class="col-12 col-xl-3 col-sm-3" >
+      <div class="sidebar">
+        <ul>
+          <li>
+            <a href="#" class="sidebara">学校教育</a>
+            <ul class="hidden">
+              <li><a>直属学校</a></li>
+              <li><a>直属高等学校</a></li>
+              <li><a>教育内容</a></li>
+              <li><a>教科书</a></li>
+              <li><a>毕业志愿</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"  class="sidebara">教职员</a>
+            <ul class="hidden">
+              <li><a>人事罢免</a></li>
+              <li><a>入职申请</a></li>
+              <li><a>福利事项</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"  class="sidebara">时间安排</a>
+            <ul class="hidden">
+              <li><a>登校时间变更</a></li>
+              <li><a>社团活动时间变更</a></li>
+            </ul>
 
-  <div style="text-align: right;">
-    <button class="btn btn-primary mb-3" id="" style="display: inline-block" type="submit" onclick="redirect()">返回首页</button>
-    <button class="btn btn-primary mb-3 hidden" id="paper_save" type="submit" onclick="CreatImg()">保存图片</button>
-  </div>
+          </li>
 
-  <div id="paper" ref="paper" class="mb-3 hidden" style="height:100%;width: 100%;border: 1px solid #ced4da;border-radius: 5px;padding: 30px;">
-    <h5>ACG教育委員会录取通知</h5>
-    <p>{school} 招生委员会 - From admission@moe.acg.school</p>
-    <img id="school_logo" src="" width="100" style="display: inline-block;"><div id="line" style="border: 2px solid black;display: inline-block;height: 100px;margin-bottom: -43px;"></div>
-    <div style="display: inline-block;font-size: 30px;" id="school_name">{school}</div>
-    <hr>
-    <p>申请编号: {applyID}</p>
-    <p>申请身份: {applyType}</p>
-    <p>申请学校: {school}</p>
-    <div style="width: 100%;">
-      <img style="position: absolute;width: 166px;height: 207px;right: 53px;top: 250px;" class="hidden" id="profile" src="">
+        </ul>
+      </div>
+
     </div>
-
-    <br>
-    <br>
-    <p>亲爱的 {name}{gender_name}</p>
-    <br>
-    <a>恭喜你，由于您优秀的成绩，我们诚挚的邀请你来到我们学校学习。{school}一直秉承着优秀的教学理念，提供给学生一切需要的资源。我们期待你能在本校的学习过程中为社会做出贡献。</a>
-    <br>
-    <br>
-    <a style="font-weight: bold;">校园介绍</a><br>
-    {schoolIntroduce}
-    <br>
-    <br>
-    <strong style="color: red;">您需要想办法前往二次元，这份录取才会生效~</strong>
-    <br>
-    <br>
-    <br> <br> <br> <br> <br>  <br> <br> <br>  <br> <br> <br>  <br> <br> <br> <br> <br> <br> <br> <br> <br>
-<!--    <img style="float:right;bottom: 0;position:relative;" src="img.png">-->
-    <p style="text-align: right;">{school}</p>
-    <p style="text-align: right;">{date}</p>
-
-
-
-
-
-  </div>
-  <div id="failed" class="hidden">
-    <p>亲爱的 {name}{gender_name}</p>
-    <p>申请编号: {applyID}</p>
-    <p>申请身份: {applyType}</p>
-    <br>
-    <a>抱歉您未到达{school}录取的条件，给您带来的不便我们深感歉意。</a>
-    <br>
-    <br>
-    <a style="font-weight: bold;">校园介绍</a><br>
-    {schoolIntroduce}
-    <br>
-    <br>
-    <br>
-    <br>
-    <br> <br> <br> <br> <br>  <br> <br> <br>  <br> <br> <br>  <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
-    <!--    <img style="float:right;bottom: 0;position:relative;" src="img.png">-->
-    <p style="text-align: right;">{school}</p>
-    <p style="text-align: right;">{date}</p>
+    <div class="col-12 col-xl-9 col-sm-9">
+      <h3 class="border-bottom green-border">採用情報</h3>
+     <h2 class="notice">重要通知</h2>
+      <ul class="ul">
+        <li>用户隐私文件</li>
+        <li>粉丝运营</li>
+      </ul>
     </div>
-  <div class="alert alert-dismissible alert-danger">
+  </div>
+
+  <div class="alert alert-dismissible alert-danger mt-5">
     <strong>请注意，该网站所有内容仅供娱乐</strong>
   </div>
 </div>
-</div>
-
 
 <footer style="background: #ee7e94;color:white;font-weight: 700;font-size: 14px;margin-top: 50px;">
-  <div id="test" class="container">
+  <div class="container">
     <div class="row">
       <div class="col-md-7 footer-address">
         <div style="color:white;">
@@ -182,10 +201,13 @@
   </div>
 </footer>
 </body>
-<script src="xss.js"></script>
+<style>
+  .hidden{
+    display: none;
+  }
+</style>
 <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js"></script>
 <script src="bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/html2canvas/1.4.1/html2canvas.js"></script>
 <style>
   @media (min-width: 992px)
   {
@@ -193,242 +215,15 @@
       width: 970px;
     }
   }
-
-  @media (max-width: 774px)
-  {
-    #profile {
-      width: 154px!important;
-      height: 179px!important;
-      top: 268px!important;
-    }
-  }
-  @media (max-width: 476px)
-  {
-    #profile {
-      position: relative!important;
-      width: 154px!important;
-      height: 179px!important;
-      top: 0px!important;
-      display: block;
-      margin: 0 auto;
-      right: 0!important;
-    }
-  }
-
-  @media (max-width: 760px)
-  {
-    #school_name{
-      font-size: 23px!important;
-    }
-  }
-  @media (max-width: 498px)
-  {
-    #school_name{
-      font-size: 21px!important;
-    }
-  }
-  @media (max-width: 470px)
-  {
-    #school_name{
-      font-size: 17px!important;
-    }
-  }
-  @media (max-width: 375px)
-  {
-    #school_name{
-      font-size: 20px!important;
-    }
-    #line{
-      display: none!important;
-    }
-  }
-
 </style>
 <script>
-  // const ap = new APlayer({
-  //     container: document.getElementById('aplayer'),
-  //     audio: [{
-  //         name: 'name',
-  //         artist: 'artist',
-  //         url: 'url.mp3',
-  //         cover: 'cover.jpg'
-  //     }]
-  // });
-
-
-  var date = new Date();
-  moth = date.getUTCMonth()+1;
-  year = date.getFullYear();
-  var apply_text;
-
-  console.log(moth)
-  if(moth<=4){
-    apply_text="本季度招生已结束"
-    $("#apply").addClass("disabled");
-  }
-  if (moth>4&&moth<=12){
-    apply_text = "入学年:"+(year+1)+".4月";
-  }
-  $("#apply").text(apply_text)
-</script>
-<script>
-  function redirect(){
-    window.location = "index.html"
-  }
-  function getParams(params,key){
-    if(params.has(key)){
-      return params.get(key)
-    }
-    $("#message_error").text("参数请求错误！")
-    $("#message_error").parent().removeClass("hidden")
-    return "underfined";
-
-
-  }
-  function selectType(id){
-    switch (applyType){
-      case "0":
-        return "本国生"
-      case "1":
-        return "国外生"
-      case "2":
-        return "复读生"
-      case "3":
-        return "转校生"
-      default:
-        return "本国生"
-    }
-  }
-  function getTime(){
-    year = date.getFullYear();
-    moth = date.getMonth()+1;
-    day = date.getDate();
-
-    if(moth<10){
-      moth = `0${moth}`
-    }
-    if(day<10){
-      day = `0${day}`
-    }
-    return `${year}年${moth}月${day}日`
-  }
-  const urlparams = new URL(window.location.href).searchParams
-  var name = filterXSS(getParams(urlparams, "name"));
-  var gender = filterXSS(getParams(urlparams, "gender"));
-  var applyType = filterXSS(getParams(urlparams,"applyType"))
-  var schoolIntroduce;
-  var schooldata;
-  var schoolName = filterXSS(getParams(urlparams, "school"));
-  fetch("/schools.json?" + String(Date.parse(new Date()))).then(res => {
-    if (res.status == 200) {
-      return res.json();
-    } else throw "加载学校列表失败！";
-
-  }).then(data=>{
-    schoolIntroduce = data[schoolName]
-    // if (schoolIntroduce===undefined){
-    //   $("#message_error").text("参数加载错误！")
-    //   $("#message_error").parent().removeClass("hidden")
-    //   return;
-    // }
-    console.log(schoolIntroduce)
-    if (gender=="1"){
-      var gender_name = "桑"
-    }else{
-      var gender_name = "酱"
-    }
-
-
-    console.log(name)
-    if (name==="underfined" || gender==="underfined" || schoolName==="underfined"|| applyType==="underfined"){
-
-    }else{
-      var template = $("#paper").html()
-      var random = parseInt(Math.random()*(100-1+1)+1)
-      if(random<=50){
-        template = $("#failed").html()
-        $("#failed_message").text("很抱歉您未被"+schoolName+"录取")
-        $("#failed_message").parent().removeClass("hidden")
-      }else{
-        $("#success_message").text("恭喜你被"+schoolName+"录取")
-        $("#success_message").parent().removeClass("hidden")
-        $("#upload_profile_layout").removeClass("hidden")
+  $(document).ready(function() {
+    $(".sidebara").on('click', function(event) {
+      for (let i=0;i<$(".sidebara").parent().length;i++){
+        $(".sidebara").eq(i).parent().children().eq(1).addClass("hidden")
       }
-      template = template.replaceAll("{gender_name}",gender_name)
-      template = template.replaceAll("{applyID}","受験者"+parseInt(Math.random() * (1068 - 1000 + 1) + 1000))
-      template = template.replaceAll("{date}",getTime())
-      template = template.replaceAll("{school}",schoolName)
-      template = template.replaceAll("{name}",name)
-      template = template.replaceAll("{applyType}",selectType(applyType))
-      if (schoolIntroduce===undefined)
-      {
-
-        logo = "logo/音乃木板.png"
-        introduce = "暂无介绍"
-      }else{
-        if (schoolIntroduce.introduce==undefined || schoolIntroduce.introduce==null){
-          introduce = "暂无介绍"
-        }else{
-          introduce = schoolIntroduce.introduce
-        }
-        if (schoolIntroduce.logo==undefined || schoolIntroduce.logo==null){
-          logo = "logo/音乃木板.png"
-        }else{
-          logo = "logo/"+schoolIntroduce.logo
-        }
-      }
-
-
-      template = template.replaceAll("{schoolIntroduce}",introduce)
-      $("#paper").html(template)
-      $("#school_logo").attr("src",logo)
-      $("#paper").removeClass("hidden");
-      $("#paper_save").removeClass("hidden");
-      console.log(template)
-    }
-  })
-
-
-</script>
-<script>
-  $("#upload_profile").change(()=>{
-    let reader = new FileReader();
-    reader.readAsDataURL(document.getElementById("upload_profile").files[0]);
-    reader.onload = function () {
-      document.getElementById("profile").setAttribute("src", reader.result);
-    };
-    $("#profile").removeClass("hidden")
-  })
-  function CreatImg() {
-    var element = $("#paper");
-    window.devicePixelRatio = 5;
-    html2canvas(document.querySelector("#paper")).then(canvas=>{
-      // document.body.appendChild(canvas)
-      dataUrl=canvas.toDataURL("image/jpeg", 1.0);
-      DownLoadImg(dataUrl.replace("data:image/jpeg;base64,", ""))
+      $(this).parent().children().eq(1).removeClass("hidden")
     });
-  }
-
-  function DownLoadImg(content){
-    // 格式
-    var imageType='png';
-
-    // 文件名
-    var fileName=Date.now();
-    var raw = window.atob(content);
-    var rawLength = raw.length;
-    var uInt8Array = new Uint8Array(rawLength);
-    for(var i = 0; i < rawLength; ++i) {
-      uInt8Array[i] = raw.charCodeAt(i);
-    }
-    var blob = new Blob([uInt8Array], {type:'image/'+imageType});
-    var aLink = document.createElement('a');
-    var evt = document.createEvent("HTMLEvents");
-    evt.initEvent("click", true, true);
-    aLink.download = "录取详情_"+fileName;
-    aLink.href = URL.createObjectURL(blob);
-    aLink.click();
-
-  }
+  });
 </script>
 </html>
