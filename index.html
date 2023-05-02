@@ -77,49 +77,7 @@
             </div>
         </div>
     </div>
-    <div style="overflow: auto;">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col" style="min-width: 170px;">学校名</th>
-                <th scope="col" style="min-width: 30px;">成立时间</th>
-                <th scope="col" style="min-width: 270px;">申请条件</th>
-                <th scope="col" style="min-width: 170px;">学校类型</th>
-                <th scope="col">网站</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row">国立音乃木板学院</th>
-                <td>-</td>
-                <td>完成东京巨蛋至少一次演出</td>
-                <td>顶尖艺校</td>
-                <td>http://otonokizaka.school/</td>
-            </tr>
-            <tr>
-                <th scope="row">私立巡ヶ丘学院高等学校</th>
-                <td>-</td>
-                <td>无条件</td>
-                <td>封闭管理校园</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <th scope="row">県立大洗女子学園</th>
-                <td>-</td>
-                <td>完成战车道B1课程<br>无任何违规记录</td>
-                <td>战车道专培</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <th scope="row">桜ヶ丘高等学校</th>
-                <td>-</td>
-                <td>须魔族身份</td>
-                <td>魔族学校</td>
-                <td>-</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <div id="school-table" style="overflow: auto;"></div>
 
     <div class="alert alert-dismissible alert-danger">
         <strong>请注意，该网站所有内容仅供娱乐</strong>
@@ -157,6 +115,7 @@
 
 <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js"></script>
 <script src="bootstrap.min.js"></script>
+<script defer src="school-loader.js"></script>
 <style>
     @media (min-width: 992px)
     {
