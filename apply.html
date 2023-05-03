@@ -254,7 +254,7 @@
                 $("#info").removeClass("hidden")
                 info = tempdata.info.replaceAll("\n","<br>")
                 console.log(info)
-                $("#info strong").text(info)
+                $("#info strong").html(info)
                 $("#info p").text(schoolname)
             }else{
                 $("#info").addClass("hidden")
@@ -268,6 +268,7 @@
                 $("#submit").attr("disabled",false);
             }
         }else{
+            $("#info").addClass("hidden")
             $("#submit").removeClass("disabled");
             $("#submit").attr("disabled",false);
         }
