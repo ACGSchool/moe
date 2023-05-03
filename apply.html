@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>入学申请-ACG教育委員会</title>
     <link rel="stylesheet" href="bootstrap.min.css">
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/animate.css/4.1.1/animate.min.css" type="text/css" rel="stylesheet" />
     <!-- 引入Font Awesome图标库 -->
     <link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css">
     <!-- 引入Toast消息组件 -->
@@ -73,6 +74,11 @@
             <select required class="form-control" id="schoolList" width="50%">
                 <option disabled selected>申请学校名称</option>
             </select>
+        </div>
+        <div id="info" class="alert alert-dismissible alert-info hidden p-3 animate__bounceIn">
+            <i class="fa-solid fa-circle-info"></i>
+            <strong></strong>
+            <p style="margin: 0;text-align: right;">{school}</p>
         </div>
         <div class="input-group mb-3 hidden">
             <input required type="text" id="school_name" value="" class="form-control" placeholder="请输入学校名称"  aria-label="学校" style="margin-right: 10px;">
@@ -178,6 +184,10 @@
                 createToast("error", "请填写申请学校名", true, 3)
                 return;
             }
+            if (custom in window.data){
+                createToast("error", "本校存在申请列表中，请从列表直接申请", true, 3)
+                return;
+            }
             // console.log(custom)
             school = custom
         }
@@ -232,12 +242,37 @@
         }
         tempdata = window.data[schoolname]
 
-        if(tempdata.task==undefined || tempdata.task==""){
-            tasktext = "无"
+        if (schoolname!=="other"){
+            if(tempdata.task==undefined || tempdata.task==""){
+                tasktext = "无"
+            }else{
+                tasktext = tempdata.task
+            }
+            tasktext = tasktext.replaceAll("\n","<br>")
+            createToast("info", "<b style='color: var(--info);'>"+schoolname+"入学要求</b><br>"+tasktext, true, 10)
+            if (tempdata.info!==null && tempdata.info!==undefined && tempdata.info!==""){
+                $("#info").removeClass("hidden")
+                info = tempdata.info.replaceAll("\n","<br>")
+                console.log(info)
+                $("#info strong").text(info)
+                $("#info p").text(schoolname)
+            }else{
+                $("#info").addClass("hidden")
+            }
+            if (tempdata.closed!==undefined&&tempdata.closed!==null&&tempdata.closed===true)
+            {
+                $("#submit").addClass("disabled");
+                $("#submit").attr("disabled",true);
+            }else{
+                $("#submit").removeClass("disabled");
+                $("#submit").attr("disabled",false);
+            }
         }else{
-            tasktext = tempdata.task
+            $("#submit").removeClass("disabled");
+            $("#submit").attr("disabled",false);
         }
-        createToast("info", "<b style='color: var(--info);'>"+schoolname+"入学要求</b><br>"+tasktext, true, 10)
+
+
         console.log(data)
     })
 
