@@ -259,6 +259,18 @@
             }else{
                 $("#info").addClass("hidden")
             }
+            if(tempdata.permission!=null && tempdata.permission!=undefined && tempdata.permission!=0){
+                if (tempdata.permission===1){
+                    $("#boy").attr("disabled","false")
+                    $("#girl").attr("checked","true")
+                }else{
+                    $("#girl").attr("disabled","false")
+                    $("#boy").attr("checked","true")
+                }
+            }else{
+                $("#boy").attr("disabled","true")
+                $("#girl").attr("disabled","true")
+            }
             if (tempdata.closed!==undefined&&tempdata.closed!==null&&tempdata.closed===true)
             {
                 $("#submit").addClass("disabled");
