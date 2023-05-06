@@ -350,6 +350,14 @@
         $("#failed_message").text("很抱歉您未被"+schoolName+"录取")
         $("#failed_message").parent().removeClass("hidden")
       }else{
+        if (schoolIntroduce.permission!==undefined && schoolIntroduce.permission!==null && schoolIntroduce.permission!==0){
+          if (schoolIntroduce.permission===1 && gender=="1"){
+            $("#failed_message").html("恭喜你被"+schoolName+"录取<br>但是因为这是女校而你是男生的关系，你被秒开<a style='color: red;'>Hentai!!!</a><br><b>你的OFFER已被收回</b>")
+            $("#failed_message").parent().removeClass("hidden")
+            return;
+
+          }
+        }
         $("#success_message").text("恭喜你被"+schoolName+"录取")
         $("#success_message").parent().removeClass("hidden")
         $("#upload_profile_layout").removeClass("hidden")
@@ -377,6 +385,7 @@
           logo = "logo/"+schoolIntroduce.logo
         }
       }
+
 
 
       template = template.replaceAll("{schoolIntroduce}",introduce)
