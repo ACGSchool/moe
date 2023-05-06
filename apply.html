@@ -261,15 +261,15 @@
             }
             if(tempdata.permission!=null && tempdata.permission!=undefined && tempdata.permission!=0){
                 if (tempdata.permission===1){
-                    $("#boy").attr("disabled","false")
-                    $("#girl").attr("checked","true")
+                    $("#boy").attr("disabled",false)
+                    $("#girl").attr("checked",true)
                 }else{
-                    $("#girl").attr("disabled","false")
-                    $("#boy").attr("checked","true")
+                    $("#girl").attr("disabled",false)
+                    $("#boy").attr("checked",true)
                 }
             }else{
-                $("#boy").attr("disabled","false")
-                $("#girl").attr("disabled","false")
+                $("#boy").attr("disabled",false)
+                $("#girl").attr("disabled",false)
             }
             if (tempdata.closed!==undefined&&tempdata.closed!==null&&tempdata.closed===true)
             {
@@ -280,8 +280,8 @@
                 $("#submit").attr("disabled",false);
             }
         }else{
-            $("#boy").attr("disabled","false")
-            $("#girl").attr("disabled","false")
+            $("#boy").attr("disabled",false)
+            $("#girl").attr("disabled",false)
             $("#info").addClass("hidden")
             $("#submit").removeClass("disabled");
             $("#submit").attr("disabled",false);
