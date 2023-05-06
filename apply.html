@@ -268,8 +268,8 @@
                     $("#boy").attr("checked","true")
                 }
             }else{
-                $("#boy").attr("disabled","true")
-                $("#girl").attr("disabled","true")
+                $("#boy").attr("disabled","false")
+                $("#girl").attr("disabled","false")
             }
             if (tempdata.closed!==undefined&&tempdata.closed!==null&&tempdata.closed===true)
             {
@@ -280,6 +280,8 @@
                 $("#submit").attr("disabled",false);
             }
         }else{
+            $("#boy").attr("disabled","false")
+            $("#girl").attr("disabled","false")
             $("#info").addClass("hidden")
             $("#submit").removeClass("disabled");
             $("#submit").attr("disabled",false);
