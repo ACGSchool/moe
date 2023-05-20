@@ -58,6 +58,7 @@
 
 
 <style>
+  
   .warning{
     font-weight: bold;
     color: red;
@@ -240,13 +241,22 @@
 </style>
   <div class="black_screen hidden">
     <div class="img-inside">
-      <img id="inside_img" src="" style="position:absolute;border: 5px solid #fff;">
+      <img id="inside_img" src="">
       <p style="padding: 2px;">余白をクリックして画面を消します</p>
     </div>
   </div>
 </footer>
 </body>
 <style>
+  #inside_img{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    max-width: 80%;
+    max-height: 80%;
+    transform: translateX(-50%) translateY(-50%);
+    border: 5px solid #fff;
+  }
   .hidden{
     display: none;
   }
@@ -388,7 +398,7 @@
   $(window).bind("load resize",function(){
     astatus = $(".black_screen").css("display")
     if (astatus==="block"){
-      look_big_img();
+      //look_big_img();
     }
   });
   $(document).on("click",".img-inside",function (event){
@@ -401,10 +411,10 @@
     $(".black_screen").fadeIn()
     console.log($(".black_screen").css("height"))
     $("#inside_img").attr("src",$(event.target).attr("src"))
-    look_big_img();
+    //look_big_img();
 
   });
-
+  /*
   function look_big_img(){
     width = document.body.clientWidth
     height = document.documentElement.clientHeight
@@ -440,6 +450,7 @@
     }
     $("#inside_img").css("bottom",off_height)
   }
+  */
 </script>
 
 </html>
