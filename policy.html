@@ -229,6 +229,9 @@
     z-index: 9999;
     width: 100%;
     height: 100%;
+    transition: opacity 2s;
+    display: none;
+    opacity: 0;
   }
   .img-inside{
     width: 100%;
@@ -239,7 +242,7 @@
     display: none;
   }
 </style>
-  <div class="black_screen hidden">
+  <div class="black_screen">
     <div class="img-inside">
       <img id="inside_img" src="">
       <p style="padding: 2px;">余白をクリックして画面を消します</p>
@@ -395,21 +398,24 @@
       }
     }
   })
+  /*
   $(window).bind("load resize",function(){
     astatus = $(".black_screen").css("display")
     if (astatus==="block"){
-      //look_big_img();
+      look_big_img();
     }
   });
+  */
   $(document).on("click",".img-inside",function (event){
     if (event.target===event.currentTarget){
-
-      $(".black_screen").fadeOut();
+      $(".black_screen").style.opacity = 0;
+      $(".black_screen").style.display = "none";
     }
   })
   $(document).on("click", ".img-show", function(event){
-    $(".black_screen").fadeIn()
-    console.log($(".black_screen").css("height"))
+    $(".black_screen").style.display = "block";
+    $(".black_screen").style.opacity = 1;
+    //console.log($(".black_screen").css("height"))
     $("#inside_img").attr("src",$(event.target).attr("src"))
     //look_big_img();
 
