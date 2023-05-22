@@ -363,14 +363,14 @@
     question = window.newquestion[window.now_question]
     var html = $("#questionnaire_content").html(" ")
     if (question.type==="common"){
-      html.append(`<h3>${question.ask}</h3>`)
+      html.append(`<h3>${question.ask}<b style="color:darkgreen;float: right;">${window.now_question+1}/${window.newquestion.length}</b></h3>`)
       html.append(" <div class=\"input-group mb-3\">\n" +
               "            <input required=\"\" type=\"text\" id=\"questions\" class=\"form-control\" placeholder=\"请输入答案\" aria-label=\"答案\" style=\"margin-right: 10px;\">\n" +
               "        </div>")
     }
 
     if (question.type==="choices"){
-      html.append(`<h3>${question.ask}</h3>`)
+      html.append(`<h3>${question.ask}<b style="color:darkgreen;float: right;">${window.now_question+1}/${window.newquestion.length}</b></h3>`)
       html.append(" <div class=\"input-group mb-3\">\n")
       html.append(`<select required="" class="form-control" id="questions">
 
