@@ -21,6 +21,15 @@
           ],
           "type": "common"
         },
+          {
+          "ask": "μ's最后的Lovelive在哪举办的?(国家)",
+          "answer": [
+            "美国",
+            "美利坚",
+            "美利坚合众国"
+          ],
+          "type": "common"
+        },
         {
           "ask": "本校理事长是谁的母亲？",
           "choices": [
