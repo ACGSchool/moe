@@ -98,18 +98,23 @@
         "task": "",
         "type": "高等学园",
         "url": "",
+      "questionnaire":{
+        "title": "光坂高校入学受验3番",
+        "acc": 0.8,
+        "subtitle": "欢迎参加本次入学考试",
+        "content": "xxxxxxxxx",
         "questions": [
-        {
-          "ask": "猫是什么颜色的?",
-          "choices": [
-            "#d1a46a",
-            "#f0bd76",
-            "#c99c00",
-            "f8c641"
-          ],
-          "answer": 1,
-          "type": "choice"
-        },
+          {
+            "ask": "猫是什么颜色的?",
+            "choices": [
+              "#d1a46a",
+              "#f0bd76",
+              "#c99c00",
+              "f8c641"
+            ],
+            "answer": 1,
+            "type": "choice"
+          },
           {
             "ask": "clannad总共多少集?",
             "choices": [
@@ -133,7 +138,9 @@
             "answer": 3,
             "type": "choice"
           }
-      ]
+        ]
+      },
+
 
     },
     "白滨坂高等学校": {
