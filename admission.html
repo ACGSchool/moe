@@ -330,7 +330,7 @@
       $("#questionnaire_content").removeClass("hidden")
 
     }else{
-      if ($("#questions").val().trim()===""){
+      if ($("#questions").val()===null||$("#questions").val().trim()===""){
         createToast("error", "请完成本题", true, 3)
         return;
       }
