@@ -110,10 +110,10 @@
               "#d1a46a",
               "#f0bd76",
               "#c99c00",
-              "f8c641"
+              "#f8c641"
             ],
             "answer": 1,
-            "type": "choice"
+            "type": "choices"
           },
           {
             "ask": "clannad总共多少集?",
@@ -124,7 +124,7 @@
               "49"
             ],
             "answer": 3,
-            "type": "choice"
+            "type": "choices"
           },
           {
             "ask": "主要的4个团子的颜色不包括什么?",
@@ -136,7 +136,7 @@
               "绿色"
             ],
             "answer": 3,
-            "type": "choice"
+            "type": "choices"
           }
         ]
       }
