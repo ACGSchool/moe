@@ -97,7 +97,44 @@
         "time": "",
         "task": "",
         "type": "高等学园",
-        "url": ""
+        "url": "",
+        "questions": [
+        {
+          "ask": "猫是什么颜色的?",
+          "choices": [
+            "#d1a46a",
+            "#f0bd76",
+            "#c99c00",
+            "f8c641"
+          ],
+          "answer": 1,
+          "type": "choice"
+        },
+          {
+            "ask": "clannad总共多少集?",
+            "choices": [
+              "44",
+              "46",
+              "48",
+              "49"
+            ],
+            "answer": 3,
+            "type": "choice"
+          },
+          {
+            "ask": "主要的4个团子的颜色不包括什么?",
+            "choices": [
+              "粉色",
+              "黄色",
+              "蓝色",
+              "红色",
+              "绿色"
+            ],
+            "answer": 3,
+            "type": "choice"
+          }
+      ]
+
     },
     "白滨坂高等学校": {
     "time":"",
