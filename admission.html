@@ -8,8 +8,13 @@
 
 </head>
 <body>
+<link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css">
+<!-- 引入Toast消息组件 -->
+<link rel="stylesheet" href="./css/toast.css">
 <link rel="stylesheet" href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.css">
 <div id="aplayer"></div>
+<script src="./js/toast.js" defer></script>
+
 <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.js"></script>
 <header>
   <div style="display: inline-block;color: grey;width: 100%;text-align: center;" >
@@ -88,9 +93,14 @@
 
   <div style="text-align: right;">
     <button class="btn btn-primary mb-3" id="" style="display: inline-block" type="submit" onclick="redirect()">返回首页</button>
+    <button class="btn btn-success mb-3 hidden" id="restart_button" style="display: inline-block" type="submit" onclick="restart_test(1)">补考</button>
     <button class="btn btn-primary mb-3 hidden" id="paper_save" type="submit" onclick="CreatImg()">保存图片</button>
   </div>
   <div id="questionnaire" class="mb-3 hidden">
+    <h2 style="border-bottom: 4px solid #ee7e94;">受验需求</h2>
+    <p><span style="color: #ee7e94;">受验信息</span>:{test_name}</p>
+    <p><span style="color: #ee7e94;">受验提示</span>:{test_tip}</p>
+    <hr>
     您的申请资料已经通过审核，但您需要完成最多几道问题并查看我们最终的决定
     <br>您每次申请的题目可能都是不同的
     <button class="btn btn-primary" onclick="questionnaire(0)">点我开始</button>
@@ -307,6 +317,10 @@
     }
   }
 
+  function restartTest(){
+
+  }
+
   function questionnaire(index=-1){
     if (index===0){
       $("#questionnaire").addClass("hidden")
@@ -317,7 +331,7 @@
 
     }else{
       if ($("#questions").val().trim()===""){
-        alert("请勿为空")
+        createToast("error", "请完成本题", true, 3)
         return;
       }
       window.now_question+=1
@@ -347,8 +361,17 @@
 
         $("#questionnaire_content").removeClass("hidden")
         if (acc<0.8){
-          $("#failed_message").text("很抱歉您未被通过"+schoolName+"的问卷考试")
+          $("#failed_message").text("很抱歉您未通过"+schoolName+"的问卷考试")
           $("#failed_message").parent().removeClass("hidden")
+          if (window.restart<1){
+            restart_chance =Math.floor(Math.random()*100);
+            if (restart_chance<=60){
+              window.restart = 1
+              $("#restart_button").removeClass("hidden")
+            }
+
+          }
+
         }else{
           $("#paper").removeClass("hidden");
           $("#paper_save").removeClass("hidden");
@@ -375,6 +398,7 @@
       html.append(`<select required="" class="form-control" id="questions">
 
             </select>`)
+      $("#questions").append(`<option selected disabled value="-1">请选择答案</option>`)
       for(let k=0;k<question.choices.length;k++){
         $("#questions").append(`<option value="${k}">${question.choices[k]}</option>`)
 
@@ -386,6 +410,53 @@
 
 
 
+  }
+
+  function restart_test(restart=0){
+
+    $("#failed_message").parent().addClass("hidden")
+    $("#restart_button").addClass("hidden")
+    schoolIntroduce = window.schoolIntroduce
+    schoolName = window.schoolName
+    window.question_len = schoolIntroduce.questionnaire.questions.length
+    window.now_question = -1
+    window.right = 0
+
+    let question_list = schoolIntroduce.questionnaire.questions.slice()
+    if (window.test_info_templete!==undefined){
+      $("#questionnaire").html(window.test_info_templete)
+      var qu = $("#questionnaire").html()
+    }else{
+      var qu = $("#questionnaire").html()
+    }
+
+    window.test_info_templete = qu
+    if (restart===0){
+      title = schoolIntroduce.questionnaire.title
+    }else{
+      title = schoolIntroduce.questionnaire.title + `<span style="color: red;">--补考</span>`
+    }
+    qu = qu.replaceAll("{test_tip}",schoolIntroduce.questionnaire.subtitle)
+    qu = qu.replaceAll("{test_name}",title)
+    $("#questionnaire").html(qu)
+    $("#questionnaire").append(`<br><br><span>根据${schoolName}的招生计划，您需要达到<b style="color: red;">${schoolIntroduce.questionnaire.acc*100}%</b>的正确率才可能被录取</span>`)
+    if (window.restart>0){
+      $("#questionnaire").append(`<br><br><span style="color: red;font-weight: bold;g">注意：您的补考只有一次机会</span>`)
+
+    }
+    $("#questionnaire").removeClass("hidden")
+    if (window.question_len<5){
+      window.random_question = parseInt(Math.random() * (window.question_len - 1 + 1) + 1)
+    }else{
+      window.random_question = parseInt(Math.random() * (5 - 1 + 1) + 1)
+    }
+    window.newquestion = []
+    for (let i=0;i<window.random_question;i++){
+      id=Math.floor(Math.random()*question_list.length);
+      window.newquestion.push(question_list[id])
+      question_list.splice(id,1)
+      window.question_len = question_list.length
+    }
   }
   function getTime(){
     year = date.getFullYear();
@@ -448,24 +519,11 @@
        
         //新加入的内容,问卷
         if (schoolIntroduce.questionnaire!==undefined && schoolIntroduce.questionnaire.questions.length!==0){
-          window.question_len = schoolIntroduce.questionnaire.questions.length
-          window.now_question = -1
-          window.right = 0
-          let question_list = schoolIntroduce.questionnaire.questions.slice()
-          $("#questionnaire").append(`<br><br><span>根据${schoolName}的招生计划，您需要达到<b style="color: red;">${schoolIntroduce.questionnaire.acc*100}%</b>的正确率才可能被录取</span>`)
-          $("#questionnaire").removeClass("hidden")
-          if (window.question_len<5){
-            window.random_question = parseInt(Math.random() * (window.question_len - 1 + 1) + 1)
-          }else{
-            window.random_question = parseInt(Math.random() * (5 - 1 + 1) + 1)
-          }
-          window.newquestion = []
-          for (let i=0;i<window.random_question;i++){
-            id=Math.floor(Math.random()*question_list.length);
-            window.newquestion.push(question_list[id])
-            question_list.splice(id,1)
-            window.question_len = question_list.length
-          }
+          window.restart = 0
+          window.schoolIntroduce = schoolIntroduce
+          window.schoolName = schoolName
+          restart_test()
+
 
 
 
@@ -534,6 +592,7 @@
     window.devicePixelRatio = 5;
     html2canvas(document.querySelector("#paper")).then(canvas=>{
       // document.body.appendChild(canvas)
+
       dataUrl=canvas.toDataURL("image/jpeg", 1.0);
       DownLoadImg(dataUrl.replace("data:image/jpeg;base64,", ""))
     });
@@ -557,8 +616,19 @@
     evt.initEvent("click", true, true);
     aLink.download = "录取详情_"+fileName;
     aLink.href = URL.createObjectURL(blob);
+
     aLink.click();
 
   }
+  $(function(){
+    $(document).on('keypress',function(event){
+      if(event.keyCode=='13'){
+        if (!$("#questionnaire_content").hasClass("hidden")){
+          questionnaire()
+        }
+      }
+    })
+  })
+
 </script>
 </html>
