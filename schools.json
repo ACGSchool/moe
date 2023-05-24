@@ -7,9 +7,11 @@
         "introduce":"本校是公认的全国领先的艺校，值得一提的是本校的偶像研究部，他们曾经在lovelive舞台上演出并取得了第一名的好成绩。音乃木阪学园是一个注重培养学生音乐细胞的学校，学校内拥有大型演播厅可满足音乐训练等任务。",
         "logo": "音乃木板.png",
         "permission": 1,
+        "keywords": ["lovelive","ll","巨蛋","偶像"],
         "questionnaire":{
       "title": "国立音乃木坂学院入学受验1番",
       "acc": 0.8,
+      "apply_percent": 0.6,
       "subtitle": "欢迎参加本次入学考试",
       "content": "xxxxxxxxx",
       "questions": [

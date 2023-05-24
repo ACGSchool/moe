@@ -110,7 +110,7 @@
 
         <div class="input-group mb-3">
             <span class="input-group-text">申请理由</span>
-            <textarea class="form-control" aria-label="With textarea" placeholder="非必要"></textarea>
+            <textarea class="form-control" id="reason" aria-label="With textarea" placeholder="非必要，填上可能成功率更高"></textarea>
         </div>
         <button id="submit" class="btn btn-primary mb-3" type="submit" onclick="submit()">提交申请</button>
     </div>
@@ -191,8 +191,12 @@
             // console.log(custom)
             school = custom
         }
-
-        createToast("success", `申请已经提交！<a href="admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}" style="color: var(--success);">点击查看申请结果</a>`)
+        if ($("#reason").val().trim()!==""){
+            reason = $("#reason").val()
+        }else{
+            reason = "null"
+        }
+        createToast("success", `申请已经提交！<a href="admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}&reason=${reason}" style="color: var(--success);">点击查看申请结果</a>`)
         $("#submit").addClass("disabled");
         $("#submit").attr("disabled",true);
     }

@@ -475,6 +475,8 @@
   var name = filterXSS(getParams(urlparams, "name"));
   var gender = filterXSS(getParams(urlparams, "gender"));
   var applyType = filterXSS(getParams(urlparams,"applyType"))
+  var reason = filterXSS(getParams(urlparams,"reason"))
+
   var schoolIntroduce;
   var schooldata;
   var schoolName = filterXSS(getParams(urlparams, "school"));
@@ -504,7 +506,25 @@
     }else{
       var template = $("#paper").html()
       var random = parseInt(Math.random()*(100-1+1)+1)
-      if(random<=50){
+      if (schoolIntroduce.apply_percent!==undefined){
+        apply_percent = schoolIntroduce.apply_percent
+      }else{
+        apply_percent = 0.5
+      }
+      if (reason!=="undefined" && reason!=="null"){
+        if (schoolIntroduce.keywords !== undefined){
+          for (let i=0;i<schoolIntroduce.keywords.length;i++){
+            if (reason.indexOf(schoolIntroduce.keywords[i])!==-1){
+              apply_percent += 0.05
+              if (apply_percent>1){
+                apply_percent = 1
+              }
+            }
+          }
+        }
+      }
+      console.log(apply_percent*100)
+      if(random<=apply_percent*100){
         template = $("#failed").html()
         $("#failed_message").text("很抱歉您未被"+schoolName+"录取")
         $("#failed_message").parent().removeClass("hidden")
