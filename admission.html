@@ -441,7 +441,7 @@
     $("#questionnaire").html(qu)
     $("#questionnaire").append(`<br><br><span>根据${schoolName}的招生计划，您需要达到<b style="color: red;">${schoolIntroduce.questionnaire.acc*100}%</b>的正确率才可能被录取</span>`)
     if (window.restart>0){
-      $("#questionnaire").append(`<br><br><span style="color: red;font-weight: bold;g">注意：您的补考只有一次机会</span>`)
+      $("#questionnaire").append(`<br><br><span style="color: red;font-weight: bold;background: yellow;padding: 3px;">注意：您的补考只有一次机会</span>`)
 
     }
     $("#questionnaire").removeClass("hidden")
