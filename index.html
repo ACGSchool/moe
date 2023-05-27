@@ -213,7 +213,8 @@
    }
    .bg_new{
        background: #FEFFC2;
-       padding: 1px 14px 6px 14px;
+       padding: 1px 14px 20px 14px;
+       margin-bottom: 10px;
    }
    .notices{
        background: white;
@@ -269,6 +270,19 @@
         margin-right:-20px;
         bottom: 0px;
     }
+    .button{
+        border: 4px solid #fa9caa;
+        background: #ffc0cb;
+        border-radius: 5px;
+        display: grid;
+        color: white;
+        margin: 0 auto;
+        font-weight: 600;
+
+    }
+    .hidden{
+        display: none;
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -308,30 +322,32 @@
                     </dl>
                 </div>
             </div>
-            <div class="row">
-
-                <div class="col-lg-12">
-
-                    <div class="bs-component">
-                        <div class="jumbotron">
-                            <h1 class="display-3">入学检查</h1>
-                            <p class="lead">在这里寻找你在二次元世界的梦校，二次元欢迎您</p>
-                            <hr class="my-4">
-                            <p></p>
-                            <p class="lead">
-                                <a class="btn btn-primary btn-lg" id="apply" href="#" role="button" onclick="redirect()"></a>
-                            </p>
+            <div class="bg_new" style="background: orange">
+                <div class="notices">
+                    <h4>入学申请</h4>
+                    <div class="row">
+                        <div class="col-6 col-xl-6 col-sm-6" style="border-right: 4px solid #f1b0b7">
+                            <span>您是否已经准备好了申请我们的二次元梦校，在这里完成申请吧！</span>
+                            <hr>
+                            <button class="button" id="apply" onclick="redirect()">开始申请</button>
+                        </div>
+                        <div class="col-6 col-xl-6 col-sm-6">
+                            <span>还在考虑申请哪所学校吗？快点去查看我们支持申请的学校列表吧！</span>
+                            <hr>
+                            <button class="button" onclick="open_school()">检索学校</button>
                         </div>
                     </div>
+
                 </div>
             </div>
+
         </div>
         <div class="col-12 col-xl-4 col-sm-4" style="padding: 0;">
             <div class="sidebar">
                 <ul>
                     <li>
                         <a href="#" class="sidebara">公开资料</a>
-                        <ul class="hidden">
+                        <ul>
                             <li><a href="apply.html">申请学校</a></li>
                             <li><a>开发中</a></li>
                             <li><a>开发中</a></li>
@@ -349,7 +365,7 @@
                 <ul>
                     <li>
                         <a href="#" class="sidebara">公开资料</a>
-                        <ul class="hidden">
+                        <ul>
                             <li><a href="apply.html">申请学校</a></li>
                             <li><a>开发中</a></li>
                             <li><a>开发中</a></li>
@@ -380,7 +396,7 @@
 
     </div>
 
-    <div id="school-table" style="overflow: auto;"></div>
+    <div id="school-table" class="hidden" style="overflow: auto;"></div>
 
     <div class="alert alert-dismissible alert-danger">
         <strong>请注意，该网站所有内容仅供娱乐</strong>
@@ -448,6 +464,9 @@
     }
 </style>
 <script>
+    function open_school(){
+        $("#school-table").removeClass("hidden")
+    }
     function redirect(){
         window.location = "apply.html"
     }
@@ -467,11 +486,11 @@
 
     console.log(moth)
     if(moth<=4){
-        apply_text="本季度招生已结束（申请下一季度）"
+        apply_text="下季招生"
         // $("#apply").addClass("disabled");
     }
     if (moth>4&&moth<=12){
-        apply_text = "入学年:"+(year+1)+".4月";
+        apply_text = "本季招生";
     }
     $("#apply").text(apply_text)
 </script>
