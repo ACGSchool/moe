@@ -205,6 +205,17 @@
        border-radius: 7px;
 
    }
+    .table thead th{
+       border-bottom: 2px solid #ffc0cb;
+   }
+    .table td, .table th{
+       border-top: 1px dashed #ffc0cb;
+   }
+   #school-table>table{
+       overflow: scroll;
+       border: 10px solid #fa9caa;
+       color: #005cbf;
+   }
    .faster_module>li>a{
        display: table-cell;
        vertical-align: middle;
@@ -339,12 +350,13 @@
                         <div class="col-6 col-xl-6 col-sm-6">
                             <span>还在考虑申请哪所学校吗？快点去查看我们支持申请的学校列表吧！</span>
                             <hr>
-                            <button class="button" onclick="open_school()">检索学校</button>
+                            <button class="button" id="search_school" onclick="open_school()">检索学校</button>
                         </div>
                     </div>
 
                 </div>
             </div>
+            <div id="school-table" class="hidden" style="overflow: auto;"></div>
 
         </div>
         <div class="col-12 col-xl-4 col-sm-4" style="padding: 0;">
@@ -401,7 +413,7 @@
 
     </div>
 
-    <div id="school-table" class="hidden" style="overflow: auto;"></div>
+
 
     <div class="alert alert-dismissible alert-danger">
         <strong>请注意，该网站所有内容仅供娱乐</strong>
@@ -470,7 +482,9 @@
 </style>
 <script>
     function open_school(){
+        $("#search_school").attr("disabled","disabled")
         $("#school-table").removeClass("hidden")
+        open_school_list()
     }
     function redirect(){
         window.location = "apply.html"
