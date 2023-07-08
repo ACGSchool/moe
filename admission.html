@@ -11,9 +11,10 @@
 <link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css">
 <!-- 引入Toast消息组件 -->
 <link rel="stylesheet" href="./css/toast.css">
+<script src="./js/toast.js" defer></script>
 <link rel="stylesheet" href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.css">
 <div id="aplayer"></div>
-<script src="./js/toast.js" defer></script>
+
 
 <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.js"></script>
 <header>
@@ -272,7 +273,7 @@
   //     }]
   // });
 
-
+  apply_success = 0
   var date = new Date();
   moth = date.getUTCMonth()+1;
   year = date.getFullYear();
@@ -377,33 +378,40 @@
           $("#paper_save").removeClass("hidden");
 
           $("#success_message").text("恭喜你被"+schoolName+"录取")
+          apply_success = 1
+          setApply()
           $("#success_message").parent().removeClass("hidden")
           $("#upload_profile_layout").removeClass("hidden")
+
+
         }
       }
     }
 
     question = window.newquestion[window.now_question]
     var html = $("#questionnaire_content").html(" ")
-    if (question.type==="common"){
-      html.append(`<h3>${question.ask}<b style="color:darkgreen;float: right;">${window.now_question+1}/${window.newquestion.length}</b></h3>`)
-      html.append(" <div class=\"input-group mb-3\">\n" +
-              "            <input required=\"\" type=\"text\" id=\"questions\" class=\"form-control\" placeholder=\"请输入答案\" aria-label=\"答案\" style=\"margin-right: 10px;\">\n" +
-              "        </div>")
-    }
 
-    if (question.type==="choices"){
-      html.append(`<h3>${question.ask}<b style="color:darkgreen;float: right;">${window.now_question+1}/${window.newquestion.length}</b></h3>`)
-      html.append(" <div class=\"input-group mb-3\">\n")
-      html.append(`<select required="" class="form-control" id="questions">
+    if (question!==undefined){
+      if (question.type==="common"){
+        html.append(`<h3>${question.ask}<b style="color:darkgreen;float: right;">${window.now_question+1}/${window.newquestion.length}</b></h3>`)
+        html.append(" <div class=\"input-group mb-3\">\n" +
+                "            <input required=\"\" type=\"text\" id=\"questions\" class=\"form-control\" placeholder=\"请输入答案\" aria-label=\"答案\" style=\"margin-right: 10px;\">\n" +
+                "        </div>")
+      }
+
+      if (question.type==="choices"){
+        html.append(`<h3>${question.ask}<b style="color:darkgreen;float: right;">${window.now_question+1}/${window.newquestion.length}</b></h3>`)
+        html.append(" <div class=\"input-group mb-3\">\n")
+        html.append(`<select required="" class="form-control" id="questions">
 
             </select>`)
-      $("#questions").append(`<option selected disabled value="-1">请选择答案</option>`)
-      for(let k=0;k<question.choices.length;k++){
-        $("#questions").append(`<option value="${k}">${question.choices[k]}</option>`)
+        $("#questions").append(`<option selected disabled value="-1">请选择答案</option>`)
+        for(let k=0;k<question.choices.length;k++){
+          $("#questions").append(`<option value="${k}">${question.choices[k]}</option>`)
 
+        }
+        html.append("</div>")
       }
-      html.append("</div>")
     }
 
     html.append("<button class='btn btn-danger mt-2' onclick='questionnaire()'>继续</button>")
@@ -458,6 +466,33 @@
       window.question_len = question_list.length
     }
   }
+  function setApply(){
+    apply_list = get_cookies("apply_list")
+    if (!is_exist_cookies(apply_list)){
+      apply_list = []
+    }else{
+      apply_list = JSON.parse(apply_list)
+    }
+
+
+    schoolInfo_save = {
+      name:schoolName,
+      status:apply_success
+    }
+    end = false;
+    for (let i=0;i<apply_list.length;i++){
+      if (apply_list[i].name===schoolName){
+        apply_list[i] = schoolInfo_save
+        end = true;
+      }
+    }
+
+    if (!end){
+      apply_list.push(schoolInfo_save)
+    }
+
+    set_cookies("apply_list",apply_list)
+  }
   function getTime(){
     year = date.getFullYear();
     moth = date.getMonth()+1;
@@ -492,14 +527,16 @@
     //   $("#message_error").parent().removeClass("hidden")
     //   return;
     // }
-    console.log(schoolIntroduce)
+
     if (gender=="1"){
       var gender_name = "桑"
     }else{
       var gender_name = "酱"
     }
 
-
+    if (schoolIntroduce===undefined){
+      schoolIntroduce = {}
+    }
     console.log(name)
     if (name==="underfined" || gender==="underfined" || schoolName==="underfined"|| applyType==="underfined"){
 
@@ -548,7 +585,9 @@
 
 
         }else{
+
           $("#success_message").text("恭喜你被"+schoolName+"录取")
+          apply_success = 1
           $("#success_message").parent().removeClass("hidden")
           $("#upload_profile_layout").removeClass("hidden")
         }
@@ -592,7 +631,9 @@
         $("#paper_save").removeClass("hidden");
         console.log(template)
       }
+      // set_cookies("apply_list",null)
 
+      setApply()
     }
   })
 
@@ -651,4 +692,6 @@
   })
 
 </script>
+<script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-7-M/jquery-cookie/1.4.1/jquery.cookie.min.js" type="application/javascript"></script>
+<script src="../js/render_web.js"></script>
 </html>

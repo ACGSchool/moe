@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>学生信息-学生系统-ACG教育委員会</title>
+  <link rel="stylesheet" href="../../bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/panel.css">
+
+</head>
+<body>
+<body>
+
+{{header}}
+
+<div class="container" style="margin-top: 10px;max-width: 1200px!important;">
+  <div class="row render_menu">
+    {{menu}}
+    <div class="col-12 col-xl-9 col-sm-9">
+      <div id="school-table" class="" style="overflow: auto;">
+        <table class="table table-hover applylist" style="border: none;border-top: none;">
+          <thead>
+          <tr>
+            <th scope="col">书本名</th>
+            <th scope="col">数量</th>
+            <th scope="col">费用</th>
+            <th scope="col">征订状态</th>
+          </tr>
+          </thead>
+        </table></div>
+      <p style="text-align: right"><a href="../../sse/school/pay.html?type=books">去支付</a></p>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <div class="alert alert-dismissible alert-danger">
+    <strong>请注意，该网站所有内容仅供娱乐</strong>
+  </div>
+</div>
+<style>
+  .table td, .table th{
+    border-top: none;
+  }
+</style>
+{{footer}}
+</body>
+
+<script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-7-M/jquery-cookie/1.4.1/jquery.cookie.min.js" type="application/javascript"></script>
+<script src="../../bootstrap.min.js"></script>
+<script src="../../js/render_web.js"></script>
+<script src="../../js/toast.js"></script>
+<link rel="stylesheet" href="../../css/toast.css">
+
+<script>
+  default_book_arr = ["科学A","科学B","情报学A","情报学B","物理学A","物理学B","物理学C","算数A","算数B","图形A","图形B","人工智慧A","生物学A","生物学B",
+  "家政A","家政B","体育健康","国语A","国语B","外来语A","化学A","化学B","绘画A","绘画B","绘画D","音乐A","音乐B","算数C","微积分A","微积分B",
+  "保健A","保健B","情报学D","情报学C"]
+  books_arr = []
+  function main(){
+    new Promise(function (resolve){
+      render_all(resolve)
+    }).then(()=>{
+      fetch("/schools.json?" + String(Date.parse(new Date()))).then(res => {
+        if (res.status == 200) {
+          return res.json();
+        } else throw "加载学校列表失败！";
+
+      }).then(data=>{
+        window.data = data
+        return data
+      }).then(data=>{
+        sci = get_cookies("school_information")
+        if (!is_exist_cookies(sci)){
+          alert("请先申请并录取后再征订书籍")
+          return
+        }
+        sci = JSON.parse(sci)
+        books = get_cookies("books")
+
+        need_book = 10
+        books_exist = []
+        if (!is_exist_cookies(books)){
+          user_school = window.data[sci.name]
+          if (user_school.require_books!==undefined){
+            need_book = user_school.require_books
+          }
+          for (let i=0;i<need_book;i++){
+            ids = Math.floor((Math.random()*default_book_arr.length))
+            new_book = default_book_arr[ids]
+            default_book_arr.splice(ids,1)
+            books_exist.push(new_book)
+            books_arr.push({"name":new_book,"price":parseFloat(Math.random() * (6000 - 500 + 1) + 6000),"item":1,"status":0})
+          }
+
+
+
+          if (user_school!==undefined){
+            if (user_school.books!==undefined){
+              //特色书籍
+
+              for (let c=0;c<user_school.books.length;c++){
+                if (books_exist.indexOf(user_school.books[c])!==-1){
+                  continue;
+                }
+
+                books_exist.push(user_school.books[c])
+                books_arr.push({"name":user_school.books[c],"price":parseFloat(Math.random() * (6000 - 500 + 1) + 6000),"item":1,"status":0})
+              }
+            }
+
+
+
+          }
+
+
+          set_cookies("books",null)
+        }
+
+        if (books_arr.length!==0){
+          books = books_arr
+        }else{
+          books = JSON.parse(books)
+        }
+
+        for (let i=0;i<books.length;i++){
+          tr = document.createElement("tr")
+          td1 = document.createElement("td")
+          td2 = document.createElement("td")
+          td3 = document.createElement("td")
+          td4 = document.createElement("td")
+          td1.innerHTML = books[i].name
+          td2.innerHTML = books[i].item
+          td3.innerHTML = books[i].price.toFixed(1)+"円"
+          stat = "<span style='color: darkgreen;'>已支付</span>"
+          if (books[i].status===0){
+            stat = "<span style='color: red;'>待支付</span>"
+          }
+
+          td4.innerHTML = stat
+          // if (apply_list[i].status===0){
+          //   stat = "<span style='color: red;'>未录取</span>"
+          //   buttonforapply = "<span style='color: grey;'>未录取禁止操作</span>"
+          // }else if (apply_list[i].status===1){
+          //   stat = "<span style='color: green;'>已录取，等待接受</span>"
+          //
+          //
+          //   buttonforapply =` <a  onclick='accept_offer("${apply_list[i].name}")'>接受</a>|<a href=''>拒绝</a>`
+          //   if (is_exist_cookies(scil)){
+          //     buttonforapply = "<span style='color: grey;'>已接受其他，无法接受</span>"
+          //   }
+          // }else if (apply_list[i].status===2){
+          //   stat = "<span style='color: darkgreen;'>已录取并接受</span>"
+          //   buttonforapply = "<span>已接受</span>"
+          // }
+
+
+
+
+          tr.append(td1)
+          tr.append(td2)
+          tr.append(td3)
+          tr.append(td4)
+          tbody.append(tr)
+
+        }
+        $(".applylist").append(tbody)
+
+      })
+    })
+
+    tbody = document.createElement("tbody")
+    apply_list = get_cookies("apply_list")
+    // if (is_exist_cookies(apply_list)){
+    //   createToast("info", "未找到任何申请记录,请先申请", true, 3)
+    //   return
+    // }
+    apply_list = JSON.parse(apply_list)
+    window.apply_list = apply_list
+
+
+
+  }
+  main()
+  // set_cookies("school_information",null)
+  function accept_offer(name){
+    let result = confirm("您确定要接受"+name+"的录取去向吗？\nPS:你只能接受一个录取，如需更换请申请转学")
+    if (result===true){
+      sci = window.data[name]
+      if (sci===undefined){
+        sci = {}
+      }
+      school_information_json = {
+        "rank":sci.rank,
+        "name":name,
+        "detail":sci.introduce,
+        "type":sci.type
+      }
+      for (let i=0;i<window.apply_list.length;i++){
+        if (window.apply_list[i].name===name){
+          window.apply_list[i].status = 2
+        }else{
+          if (window.apply_list[i].status===2){
+            window.apply_list[i].status = 1
+          }
+        }
+      }
+      set_cookies("school_information",school_information_json)
+      set_cookies("apply_list",window.apply_list)
+      alert("恭喜成为"+name+"的学生，请到学校服务获取更多帮助")
+    }
+  }
+
+</script>
+</html>

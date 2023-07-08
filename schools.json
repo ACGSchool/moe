@@ -8,6 +8,16 @@
         "logo": "音乃木板.png",
         "permission": 1,
         "keywords": ["lovelive","ll","巨蛋","偶像"],
+        "rank": 1,
+        "require_books": 15,
+        "books": [
+        "音乐A",
+        "音乐B",
+        "偶像学A",
+        "偶像学B",
+        "编曲A",
+        "LoveLive官方指南"
+        ],
         "questionnaire":{
       "title": "国立音乃木坂学院入学受验1番",
       "acc": 0.8,
@@ -56,12 +66,13 @@
     },
     "私立巡ヶ丘学院高等学校": {
         "time": "",
+        "alias": "",
         "task": "",
         "type": "封闭管理校园",
         "url": "",
         "logo": "巡之丘.jpg"
     },
-  "京都府立北宇治高等学校\n": {
+  "京都府立北宇治高等学校": {
     "time": "",
     "task": "",
     "type": "直属高等学校",

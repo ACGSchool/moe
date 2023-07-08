@@ -149,6 +149,9 @@
 </body>
 
 <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-7-M/jquery-cookie/1.4.1/jquery.cookie.min.js" type="application/javascript"></script>
+
+<script src="../../js/render_web.js"></script>
 <script src="bootstrap.min.js"></script>
 <style>
     @media (min-width: 992px)
@@ -161,7 +164,15 @@
 
 </style>
 <script>
+
+    function randomGrade(){
+        grade = parseInt(Math.random() * (3 - 1 + 1) + 1)
+        classGroup = ['A',"B","C","D","E","F","G"]
+        Class = classGroup[Math.floor((Math.random()*classGroup.length))]
+        return grade+"-"+Class
+    }
     function submit(){
+
         var gender = $("input[name='gender']:checked").val()
         var studentType = $("#studentType").val()
         if (studentType==null){
@@ -196,6 +207,37 @@
         }else{
             reason = "null"
         }
+
+        personal = get_cookies("personal_information")
+
+        if (is_exist_cookies(personal)){
+            personal = JSON.parse(personal)
+            if (parseInt(personal.gender)!==parseInt(gender) || personal.name!==application){
+                createToast("warning","由于更换学生信息，您之前的账号已被注销",true,5)
+                set_cookies("school_information",null)
+                set_cookies("apply_list",null)
+            }else{
+                scif = get_cookies("school_information")
+                if (is_exist_cookies(scif)){
+                    scif = JSON.parse(scif)
+                    createToast("error", "您学籍已挂靠在"+scif.name+"，如需申请其他学校请在学生系统中申请退学/转学", true, 10)
+                    return
+                }
+            }
+
+        }
+
+
+        personal_information_json = {
+            "name":application,
+            "gender":gender,
+            "reason":reason,
+            "grade":randomGrade(),
+            "group":"",
+            "studentId":"M"+parseInt(Math.random() * (1068 - 1000 + 1) + 1000),
+            "testId":parseInt(Math.random() * (1068 - 1000 + 1) + 1000)
+        }
+        set_cookies("personal_information",personal_information_json)
         createToast("success", `申请已经提交！<a href="admission.html?name=${application}&school=${school}&gender=${gender}&applyType=${studentType}&reason=${reason}" style="color: var(--success);">点击查看申请结果</a>`)
         $("#submit").addClass("disabled");
         $("#submit").attr("disabled",true);

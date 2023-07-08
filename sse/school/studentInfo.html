@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>学生信息-学生系统-ACG教育委員会</title>
+  <link rel="stylesheet" href="../../bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/panel.css">
+</head>
+<body>
+<body>
+
+{{header}}
+
+<div class="container" style="margin-top: 10px;max-width: 1200px!important;">
+  <div class="row render_menu">
+    {{menu}}
+    <div class="col-12 col-xl-9 col-sm-9">
+
+      <div class="bg_new">
+        <div class="notices studentInfo">
+          <h4>学生信息</h4>
+          <p>学生姓名: <!--studentName!--></p>
+          <p>受验番号:<!--testId!--></p>
+          <p>性别: <!--studentGender!--></p>
+          <p>入学原因:<!--reason!--></p>
+          <p>番号:<!--studentId!--></p>
+          <p>小组:<!--group!--></p>
+          <p>组别:<!--grade!--></p>
+        </div>
+
+      </div>
+
+      <div class="bg_new">
+        <div class="notices schoolInfo">
+          <h4>学校信息<!--entry!--></h4>
+          <p>学校名称:<!--name!--></p>
+          <p>学校类型:<!--type!--></p>
+          <p>学校排名:<!--rank!--></p>
+          <p>学校简介:<!--detail!--></p>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <div class="alert alert-dismissible alert-danger">
+    <strong>请注意，该网站所有内容仅供娱乐</strong>
+  </div>
+</div>
+
+{{footer}}
+</body>
+
+<script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-7-M/jquery-cookie/1.4.1/jquery.cookie.min.js" type="application/javascript"></script>
+<script src="../../bootstrap.min.js"></script>
+<script src="../../js/render_web.js"></script>
+<script>
+  personal_information = get_cookies("personal_information")
+  school_information = get_cookies("school_information")
+  if (!is_exist_cookies(personal_information)){
+    alert("个人信息不完整，请先申请学校")
+    personal_information = {}
+  }
+  if (!is_exist_cookies(school_information)){
+    school_information = {}
+    entry_school = "<span style='color: red;'>(暂未入学)</span>"
+  }else{
+    entry_school = "<span style='color: green;'>(已入学)</span>"
+  }
+  try {
+    school_information = JSON.parse(school_information)
+  }catch (e){
+
+  }
+  personal_information = JSON.parse(personal_information)
+
+  if (parseInt(personal_information.gender)===0){
+    personal_information.gender = "女"
+  }else{
+    personal_information.gender = "男"
+  }
+  personal_information_json = {
+    "studentName":personal_information.name,
+    "studentGender":personal_information.gender,
+    "reason":personal_information.reason,
+    "grade":personal_information.grade,
+    "group":personal_information.group,
+    "studentId":personal_information.studentId,
+    "testId":personal_information.testId
+  }
+
+  school_information_json = {
+    "rank":school_information.rank,
+    "name":school_information.name,
+    "detail":school_information.detail,
+    "type":school_information.type,
+    "entry":entry_school
+  }
+  if (school_information.name===undefined){
+    personal_information_json["studentId"] = "未入学，隐藏"
+    personal_information_json["group"] = "未入学，隐藏"
+    personal_information_json["grade"] = "未入学，隐藏"
+  }
+  new Promise(function (resolve){
+    render_all(resolve)
+  }).then(()=>{
+    render_templete(personal_information_json,".studentInfo")
+    render_templete(school_information_json,".schoolInfo")
+  })
+
+
+</script>
+</html>
