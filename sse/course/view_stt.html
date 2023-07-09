@@ -154,6 +154,7 @@
   var stt_arr = []
   const urlparams = new URL(window.location.href).searchParams
   custom_stt_num = getParams(urlparams, "stt");
+
   function randomIds(){
     ids = Math.floor((Math.random()*stt_arr.length))
     return ids
@@ -171,6 +172,10 @@
         window.data = data
         return data
       }).then(data=>{
+        console.log(custom_stt_num)
+        if (custom_stt_num==="underfined"||custom_stt_num===undefined||custom_stt_num===null||custom_stt_num===""){
+          window.location = "../../sse/course/stt.html"
+        }
         school_information = get_cookies("school_information")
 
         if (!is_exist_cookies(school_information)){

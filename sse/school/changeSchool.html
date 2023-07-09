@@ -22,13 +22,13 @@
         <table class="table table-hover applylist">
           <thead>
           <tr>
-            <th scope="col" "="">学校名</th>
-            <th scope="col" "="">学校类型</th>
-            <th scope="col" "="">申请状态</th>
-            <th scope="col" "="">接受/拒绝</th>
+            <th scope="col">学校名</th>
+            <th scope="col">学校类型</th>
+            <th scope="col">学校状态</th>
+            <th scope="col">操作</th>
           </tr>
           </thead>
-          </table></div>
+        </table></div>
 
 
 
@@ -56,6 +56,8 @@
 <link rel="stylesheet" href="../../css/toast.css">
 
 <script>
+  scil = load_cookies("school_information")
+
   function main(){
     new Promise(function (resolve){
       render_all(resolve)
@@ -70,7 +72,7 @@
         return data
 
       }).then(data=>{
-        scil = get_cookies("school_information")
+
         for (let i=0;i<apply_list.length;i++){
           schoolI = data[apply_list[i].name]
           if (schoolI===undefined){
@@ -98,7 +100,7 @@
             }
           }else if (apply_list[i].status===2){
             stat = "<span style='color: darkgreen;'>已录取并接受</span>"
-            buttonforapply = "<span>已接受</span>"
+            buttonforapply = "<span><a>转学</a>|<a href='#' onclick='cancel_school()'>退学</a></span>"
           }
 
 
@@ -109,7 +111,9 @@
           tr.append(td2)
           tr.append(td3)
           tr.append(td4)
-          tbody.append(tr)
+          if (apply_list[i].status===2){
+            tbody.append(tr)
+          }
 
         }
         $(".applylist").append(tbody)
@@ -131,6 +135,39 @@
   }
   main()
   // set_cookies("school_information",null)
+
+  function cancel_school(){
+    if (scil.name!==undefined){
+      let result = confirm("您确定要从"+scil.name+"退学吗？\nPS:退学后可重新申请或申请其他学校")
+      if (result){
+        personal_information = get_cookies("personal_information")
+
+        fee_logs = get_cookies("fee_logs")
+        apply_list = get_cookies("apply_list")
+
+        clearAllCookie()
+        if (is_exist_cookies(personal_information)){
+          set_cookies("personal_information",JSON.parse(personal_information))
+        }
+        if (is_exist_cookies(fee_logs)){
+          set_cookies("fee_logs",JSON.parse(fee_logs))
+        }
+        if (is_exist_cookies(apply_list)){
+          apply_list = JSON.parse(apply_list)
+          for (var a in apply_list){
+            if (apply_list[a].name===scil.name){
+              console.log(a)
+              apply_list.splice(a,1)
+            }
+          }
+          set_cookies("apply_list",apply_list)
+        }
+        add_fees("从"+scil.name+"退学的人工服务费",random_range_floor(100,500))
+        alert("您已从"+scil.name+"退学")
+      }
+    }
+
+  }
   function accept_offer(name){
     let result = confirm("您确定要接受"+name+"的录取去向吗？\nPS:你只能接受一个录取，如需更换请申请转学")
     if (result===true){
@@ -155,9 +192,7 @@
       }
       set_cookies("school_information",school_information_json)
       set_cookies("apply_list",window.apply_list)
-      add_fees(name+"入学处理费",random_range_floor(1000,5000))
       alert("恭喜成为"+name+"的学生，请到学校服务获取更多帮助")
-      location.reload()
     }
   }
 

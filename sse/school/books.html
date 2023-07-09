@@ -29,7 +29,7 @@
           </tr>
           </thead>
         </table></div>
-      <p style="text-align: right"><a href="../../sse/school/pay.html?type=books">去支付</a></p>
+      <p style="text-align: right" class="pay_button"><a href="../../sse/school/pay.html?type=books">去支付</a></p>
 
 
 
@@ -143,6 +143,8 @@
           stat = "<span style='color: darkgreen;'>已支付</span>"
           if (books[i].status===0){
             stat = "<span style='color: red;'>待支付</span>"
+          }else{
+            $(".pay_button").addClass("hidden")
           }
 
           td4.innerHTML = stat

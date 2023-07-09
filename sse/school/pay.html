@@ -90,10 +90,16 @@
   books_arr = []
   total_fee = 0
   var type
+  var paymentpay=false
   var canPay = true
   var books
+  fee_logs = get_cookies("fee_logs")
+  if (!is_exist_cookies(fee_logs)){
+    fee_logs = []
+  }else{
+    fee_logs = JSON.parse(fee_logs)
+  }
   books_total_fee = 0
-
   function free_pay(){
     if (canPay==false){
       alert("没有可以支付的项目")
@@ -103,10 +109,36 @@
       for (let i=0;i<books.length;i++){
         books[i].status = 1
       }
-    }
-    set_cookies("books",books)
-    alert("您的项目已支付成功，由政府补助")
+      set_cookies("books",books)
+      fee_logs.push({"name":"书费","price":books_total_fee,"time":now.getFullYear()+"-"+moth+"-"+day,"status":1})
 
+    }
+    if (paymentpay===true){
+      fee_logs[payment].status = 1
+      set_cookies("fee_logs",fee_logs)
+    }
+
+
+
+    now = new Date()
+    moth = now.getUTCMonth()
+    day = now.getUTCDate()
+    if (moth<10){
+      moth = "0"+(moth+1)
+    }
+    if (day<10){
+      day = "0"+day
+    }
+
+    set_cookies("fee_logs",fee_logs)
+
+    alert("您的项目已支付成功，由政府补助")
+    if (type==="books") {
+      window.location = "../../sse/school/books.html"
+    }
+    if (paymentpay){
+      window.location = "../../sse/apply/fee_logs.html"
+    }
   }
   function main(){
     new Promise(function (resolve){
@@ -121,9 +153,40 @@
         window.data = data
         return data
       }).then(data=>{
+
         const urlparams = new URL(window.location.href).searchParams
         type = getParams(urlparams, "type");
-        if (type==="undefined" || type.trim()===""){
+        payment = getParams(urlparams, "payment");
+        if ((type==="undefined" || type.trim()==="")&&(payment==="undefined" || payment.trim()==="")){
+          return;
+        }
+
+        payment = parseInt(payment)
+        if (payment>=0){
+
+          fee_logs = get_cookies("fee_logs")
+          if (is_exist_cookies(fee_logs)){
+            fee_logs = JSON.parse(fee_logs)
+          }else{
+            fee_logs = []
+          }
+          if (payment>=fee_logs.length){
+            return;
+          }
+
+          if (fee_logs[payment].status===1){
+            alert("本账单已支付")
+            window.location = "../../sse/apply/fee_logs.html"
+          }
+
+          fee_object.push({"object":fee_logs[payment].name,"price":fee_logs[payment].price})
+          fee_object.push({"object":"服务费","price":100})
+          fee_object.push({"object":"消费税","price":fee_logs[payment].price*0.08})
+          fee_object.push({"object":"次元跨转手续费","price":fee_logs[payment].price*0.20})
+          paymentpay = true
+          pay_object(fee_object)
+          return;
+        }else{
           return;
         }
         if (type==="books"){

@@ -42,6 +42,41 @@ function is_exist_cookies(data){
     }
     return true;
 }
+function random_range_floor(a,b){
+    return parseFloat(Math.random() * (b - a + 1) + a)
+
+}
+function get_day(){
+    now = new Date()
+    moth = now.getUTCMonth()
+    day = now.getUTCDate()
+    if (moth<10){
+        moth = "0"+(moth+1)
+    }
+    if (day<10){
+        day = "0"+day
+    }
+    return now.getFullYear()+"-"+moth+"-"+day;
+}
+function add_fees(name,price){
+    fee_logs = get_cookies("fee_logs")
+    if (!is_exist_cookies(fee_logs)){
+        fee_logs = []
+    }else{
+        fee_logs = JSON.parse(fee_logs)
+    }
+    fee_logs.push({"name":name,"price":price,"time":get_day(),"status":0})
+    set_cookies("fee_logs",fee_logs)
+}
+function clearAllCookie() {
+    var keys=document.cookie.match(/[^ =;]+(?=\=)/g);
+    if (keys) {
+        for (var i =  keys.length; i--;)
+            document.cookie = keys[i] + '=0;path=/;expires=' + new Date(0).toUTCString();// 清除当前域名路径的有限日期
+        document.cookie = keys[i] + '=0;path=/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString();// Domain Name域名 清除当前域名的
+        document.cookie = keys[i] + '=0;path=/;domain=baidu.com;expires=' + new Date(0).toUTCString();// 清除一级域名下的或指定的
+    }
+}
 function load_cookies(key){
     datas = get_cookies(key)
     if (!is_exist_cookies(datas)){
