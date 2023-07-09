@@ -214,8 +214,13 @@
             personal = JSON.parse(personal)
             if (parseInt(personal.gender)!==parseInt(gender) || personal.name!==application){
                 createToast("warning","由于更换学生信息，您之前的账号已被注销",true,5)
-                set_cookies("school_information",null)
-                set_cookies("apply_list",null)
+                fee_logs = get_cookies("fee_logs")
+                clearAllCookie()
+                if (is_exist_cookies(fee_logs)){
+                    set_cookies("fee_logs",JSON.parse(fee_logs))
+                }
+                // set_cookies("school_information",null)
+                // set_cookies("apply_list",null)
             }else{
                 scif = get_cookies("school_information")
                 if (is_exist_cookies(scif)){

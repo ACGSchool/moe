@@ -92,13 +92,16 @@
             stat = "<span style='color: green;'>已录取，等待接受</span>"
 
 
-            buttonforapply =` <a  onclick='accept_offer("${apply_list[i].name}")'>接受</a>|<a href=''>拒绝</a>`
+            buttonforapply =` <a href="#"  onclick='accept_offer("${apply_list[i].name}")'>接受</a>|<a href='#' onclick='declined_offer("${apply_list[i].name}")'>拒绝</a>`
             if (is_exist_cookies(scil)){
               buttonforapply = "<span style='color: grey;'>已接受其他，无法接受</span>"
             }
           }else if (apply_list[i].status===2){
             stat = "<span style='color: darkgreen;'>已录取并接受</span>"
             buttonforapply = "<span>已接受</span>"
+          }else if(apply_list[i].status===-1){
+            stat = "<span style='color: grey;'>已拒绝录取</span>"
+            buttonforapply = "<span>已拒绝</span>"
           }
 
 
@@ -131,6 +134,19 @@
   }
   main()
   // set_cookies("school_information",null)
+  function declined_offer(name){
+    let result = confirm("您确定要拒绝"+name+"的录取吗？\nPS:拒绝后如果需要请再次申请")
+    if (result){
+      for (let i=0;i<window.apply_list.length;i++){
+        if (window.apply_list[i].name===name){
+          window.apply_list[i].status = -1
+        }
+      }
+      set_cookies("apply_list",window.apply_list)
+      alert("您已拒绝"+name+"的录取")
+      location.reload()
+    }
+  }
   function accept_offer(name){
     let result = confirm("您确定要接受"+name+"的录取去向吗？\nPS:你只能接受一个录取，如需更换请申请转学")
     if (result===true){

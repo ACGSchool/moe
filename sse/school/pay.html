@@ -110,6 +110,15 @@
         books[i].status = 1
       }
       set_cookies("books",books)
+      now = new Date()
+      moth = now.getUTCMonth()
+      day = now.getUTCDate()
+      if (moth<10){
+        moth = "0"+(moth+1)
+      }
+      if (day<10){
+        day = "0"+day
+      }
       fee_logs.push({"name":"书费","price":books_total_fee,"time":now.getFullYear()+"-"+moth+"-"+day,"status":1})
 
     }
@@ -120,15 +129,7 @@
 
 
 
-    now = new Date()
-    moth = now.getUTCMonth()
-    day = now.getUTCDate()
-    if (moth<10){
-      moth = "0"+(moth+1)
-    }
-    if (day<10){
-      day = "0"+day
-    }
+
 
     set_cookies("fee_logs",fee_logs)
 
@@ -161,35 +162,36 @@
           return;
         }
 
-        payment = parseInt(payment)
-        if (payment>=0){
+        if (payment!=="undefined"&&payment.trim()!==""&&payment!=="underfined"){
+          payment = parseInt(payment)
+          if (payment>=0){
 
-          fee_logs = get_cookies("fee_logs")
-          if (is_exist_cookies(fee_logs)){
-            fee_logs = JSON.parse(fee_logs)
+            fee_logs = get_cookies("fee_logs")
+            if (is_exist_cookies(fee_logs)){
+              fee_logs = JSON.parse(fee_logs)
+            }else{
+              fee_logs = []
+            }
+            if (payment>=fee_logs.length){
+              return;
+            }
+
+            if (fee_logs[payment].status===1){
+              alert("本账单已支付")
+              window.location = "../../sse/apply/fee_logs.html"
+            }
+
+            fee_object.push({"object":fee_logs[payment].name,"price":fee_logs[payment].price})
+            fee_object.push({"object":"服务费","price":100})
+            fee_object.push({"object":"消费税","price":fee_logs[payment].price*0.08})
+            fee_object.push({"object":"次元跨转手续费","price":fee_logs[payment].price*0.20})
+            paymentpay = true
+            pay_object(fee_object)
+            return;
           }else{
-            fee_logs = []
-          }
-          if (payment>=fee_logs.length){
             return;
           }
-
-          if (fee_logs[payment].status===1){
-            alert("本账单已支付")
-            window.location = "../../sse/apply/fee_logs.html"
-          }
-
-          fee_object.push({"object":fee_logs[payment].name,"price":fee_logs[payment].price})
-          fee_object.push({"object":"服务费","price":100})
-          fee_object.push({"object":"消费税","price":fee_logs[payment].price*0.08})
-          fee_object.push({"object":"次元跨转手续费","price":fee_logs[payment].price*0.20})
-          paymentpay = true
-          pay_object(fee_object)
-          return;
-        }else{
-          return;
-        }
-        if (type==="books"){
+        }else if (type==="books"){
           sci = get_cookies("school_information")
           if (!is_exist_cookies(sci)){
             alert("请先申请并录取后再征订书籍")
@@ -210,6 +212,7 @@
           }else{
             books = JSON.parse(books)
           }
+
           if (books[0].status===1){
             canPay = false
             alert("您的书款已支付完毕，请勿重复支付")
