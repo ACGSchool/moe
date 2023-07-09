@@ -42,7 +42,15 @@ function is_exist_cookies(data){
     }
     return true;
 }
-
+function load_cookies(key){
+    datas = get_cookies(key)
+    if (!is_exist_cookies(datas)){
+        datas = {}
+    }else{
+        datas = JSON.parse(datas)
+    }
+    return datas
+}
 function render_templete(json,node,hidden=true){
     tpl = $(node).html()
     for (var key in json){
@@ -53,4 +61,13 @@ function render_templete(json,node,hidden=true){
         }
     }
     $(node).html(tpl)
+}
+
+function getParams(params,key){
+    if(params.has(key)){
+        return params.get(key)
+    }
+    return "underfined";
+
+
 }
