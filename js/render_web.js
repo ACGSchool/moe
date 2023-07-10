@@ -87,9 +87,9 @@ function clear_all_school_information(){
         set_cookies("apply_list",JSON.parse(apply_list))
     }
 }
-function add_fees(name,price){
+function add_fees(name,price,callbackId=null){
     fee_logs = load_data_by_arr("fee_logs")
-    fee_logs.unshift({"name":name,"price":price,"time":get_day(),"status":0})
+    fee_logs.unshift({"name":name,"price":price,"time":get_day(),"status":0,"callbackId":callbackId})
     set_data("fee_logs",fee_logs)
 }
 function add_logs(name,detail,color="black"){

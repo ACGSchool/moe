@@ -94,6 +94,7 @@
   var paymentpay=false
   var canPay = true
   var books
+  call_back = load_data_by_arr("call_back")
   fee_logs = load_data_by_arr("fee_logs")
   books_total_fee = 0
   function free_pay(){
@@ -126,7 +127,10 @@
     }
 
     set_data("fee_logs",fee_logs)
-
+    if (fee_logs[payment].callbackId!==null){
+      call_back.push(fee_logs[payment].callbackId)
+      set_data("call_back",call_back)
+    }
     alert("您的项目已支付成功，由政府补助")
     if (type==="books") {
       add_logs("费用支付",`支付${sci.name}的书款 ${books_total_fee.toFixed(1)}日元`,"green")
