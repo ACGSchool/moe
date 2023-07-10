@@ -25,10 +25,19 @@ async function render_all(resolve=null){
     })
 
 }
+function set_data_storge(key,value){
+    localStorage.setItem(key,value)
+}
+function set_data(key,value){
+    set_data_storge(key,JSON.stringify(value))
 
+}
+function get_data(key){
+    return localStorage.getItem(key)
+}
 // render_all()
 
-function set_cookies(key,value,exp=7){
+function set_cookies(key,value,exp=120){
     $.cookie(key,JSON.stringify(value),{expires:exp,path:"/"})
 }
 
@@ -46,6 +55,15 @@ function random_range_floor(a,b){
     return parseFloat(Math.random() * (b - a + 1) + a)
 
 }
+function load_data_by_arr(key){
+    temp_data = get_data(key)
+    if (!is_exist_cookies(temp_data)){
+        temp_data = []
+    }else{
+        temp_data = JSON.parse(temp_data)
+    }
+    return temp_data
+}
 function get_day(){
     now = new Date()
     moth = now.getUTCMonth()
@@ -59,29 +77,30 @@ function get_day(){
     return now.getFullYear()+"-"+moth+"-"+day;
 }
 function clear_all_school_information(){
-    fee_logs = get_cookies("fee_logs")
     apply_list = get_cookies("apply_list")
     personal_information = get_cookies("personal_information")
     clearAllCookie()
     if (is_exist_cookies(personal_information)){
         set_cookies("personal_information",JSON.parse(personal_information))
     }
-    if (is_exist_cookies(fee_logs)){
-        set_cookies("fee_logs",JSON.parse(fee_logs))
-    }
     if (is_exist_cookies(apply_list)){
         set_cookies("apply_list",JSON.parse(apply_list))
     }
 }
 function add_fees(name,price){
-    fee_logs = get_cookies("fee_logs")
+    fee_logs = load_data_by_arr("fee_logs")
     if (!is_exist_cookies(fee_logs)){
         fee_logs = []
     }else{
         fee_logs = JSON.parse(fee_logs)
     }
-    fee_logs.push({"name":name,"price":price,"time":get_day(),"status":0})
-    set_cookies("fee_logs",fee_logs)
+    fee_logs.unshift({"name":name,"price":price,"time":get_day(),"status":0})
+    set_data("fee_logs",fee_logs)
+}
+function add_logs(name,detail,color="black"){
+    logs_ces = load_data_by_arr("logs")
+    logs_ces.unshift({"name":name,"time":get_day(),"status":0,"detail":detail,"color":color})
+    set_data("logs",logs_ces)
 }
 function clearAllCookie() {
     var keys=document.cookie.match(/[^ =;]+(?=\=)/g);

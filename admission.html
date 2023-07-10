@@ -265,6 +265,8 @@
   }
 
 </style>
+<script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-7-M/jquery-cookie/1.4.1/jquery.cookie.min.js" type="application/javascript"></script>
+<script src="../js/render_web.js"></script>
 <script>
   // const ap = new APlayer({
   //     container: document.getElementById('aplayer'),
@@ -366,14 +368,20 @@
         $("#questionnaire_content").removeClass("hidden")
         if (acc<0.8){
           $("#failed_message").text("很抱歉您未通过"+schoolName+"的问卷考试")
+
           $("#failed_message").parent().removeClass("hidden")
           if (window.restart<1){
             restart_chance =Math.floor(Math.random()*100);
             if (restart_chance<=60){
+              add_logs("招生审核","在"+schoolName+"的"+schoolIntroduce.questionnaire.title+"中取得了不及格的成绩,但意外取得了补测的机会","orange")
               window.restart = 1
               $("#restart_button").removeClass("hidden")
+            }else{
+              add_logs("招生审核","在"+schoolName+"的"+schoolIntroduce.questionnaire.title+"中取得了不及格的成绩","red")
             }
 
+          }else{
+            add_logs("招生审核","在"+schoolName+"的"+schoolIntroduce.questionnaire.title+"补测中仍然取得不及格的成绩","red")
           }
 
         }else{
@@ -381,6 +389,11 @@
           $("#paper_save").removeClass("hidden");
 
           $("#success_message").text("恭喜你被"+schoolName+"录取")
+          if (window.restart<1){
+            add_logs("招生审核","在"+schoolName+"的"+schoolIntroduce.questionnaire.title+"中取得合格的成绩并被录取","green")
+          }else{
+            add_logs("招生审核","虽然很惊险但在"+schoolName+"的"+schoolIntroduce.questionnaire.title+"补测中取得了合格的成绩并被录取","green")
+          }
           apply_success = 1
           setApply()
           $("#success_message").parent().removeClass("hidden")
@@ -482,6 +495,9 @@
       name:schoolName,
       status:apply_success
     }
+    // if (apply_success===1){
+    //   add_logs("招生审核","在"+schoolName+"的招生中取得胜利，被录取")
+    // }
     end = false;
     for (let i=0;i<apply_list.length;i++){
       if (apply_list[i].name===schoolName){
@@ -514,7 +530,7 @@
   var gender = filterXSS(getParams(urlparams, "gender"));
   var applyType = filterXSS(getParams(urlparams,"applyType"))
   var reason = filterXSS(getParams(urlparams,"reason"))
-
+  apply_list = load_cookies_by_arr("apply_list")
   var schoolIntroduce;
   var schooldata;
   var schoolName = filterXSS(getParams(urlparams, "school"));
@@ -530,7 +546,15 @@
     //   $("#message_error").parent().removeClass("hidden")
     //   return;
     // }
-
+    for (var kd in apply_list){
+      if (apply_list[kd].name===schoolName){
+        if (apply_list[kd].status===1||apply_list[kd].status===2){
+          alert("已被"+schoolName+"录取，禁止重复申请")
+          window.location = "sse/apply/applylist.html"
+          return;
+        }
+      }
+    }
     if (gender=="1"){
       var gender_name = "桑"
     }else{
@@ -567,12 +591,15 @@
       if(random<=apply_percent*100){
         template = $("#failed").html()
         $("#failed_message").text("很抱歉您未被"+schoolName+"录取")
+        add_logs("招生审核","在"+schoolName+"的入学审核中失败，未被录取","red")
         $("#failed_message").parent().removeClass("hidden")
       }else{
         if (schoolIntroduce.permission!==undefined && schoolIntroduce.permission!==null && schoolIntroduce.permission!==0){
           if (schoolIntroduce.permission===1 && gender=="1"){
             $("#failed_message").html("恭喜你被"+schoolName+"录取<br>但是因为这是女校而你是男生的关系，你被秒开<a style='color: red;'>Hentai!!!</a><br><b>你的OFFER已被收回</b>")
             $("#failed_message").parent().removeClass("hidden")
+            add_logs("招生审核","在"+schoolName+"的招生中取得胜利，被录取","green")
+            add_logs("学生会",`[${schoolName}通知]因本校是女校而你使用男生身份申请，经过我校学生会会议决定，已收回录取资格并记录进档案 （隐藏成就）`,"blue")
             return;
           }
         }
@@ -588,7 +615,7 @@
 
 
         }else{
-
+          add_logs("招生审核","在"+schoolName+"的招生中取得胜利，被录取","green")
           $("#success_message").text("恭喜你被"+schoolName+"录取")
           apply_success = 1
           $("#success_message").parent().removeClass("hidden")
@@ -695,6 +722,6 @@
   })
 
 </script>
-<script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-7-M/jquery-cookie/1.4.1/jquery.cookie.min.js" type="application/javascript"></script>
-<script src="../js/render_web.js"></script>
+
+
 </html>

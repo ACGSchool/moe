@@ -75,22 +75,16 @@
     {{menu}}
     <div class="col-12 col-xl-9 col-sm-9">
 
-      <h1>消费明细</h1>
+      <h1>操作明细</h1>
       <table class="pay_list">
         <thead>
         <tr>
           <th>日期</th>
-          <th>项目名</th>
-          <th>价格</th>
+          <th style="min-width: 94px;">操作类型</th>
+          <th>具体明细</th>
         </tr>
         </thead>
 
-        <tfoot>
-        <tr>
-          <td colspan="2" class="total">总计</td>
-          <td class="total fee_total">0</td>
-        </tr>
-        </tfoot>
       </table>
 
     </div>
@@ -140,13 +134,8 @@
 
 
 
-  fee_object = []
-  books_arr = []
-  total_fee = 0
-  var type
-  var canPay = true
-  var books
-  fee_logs = load_data_by_arr("fee_logs")
+  logs = load_data_by_arr("logs")
+
   books_total_fee = 0
   function main(){
     new Promise(function (resolve){
@@ -169,7 +158,7 @@
           //   alert("请先申请后再查看消费明细")
           //   return
           // }
-          pay_object(fee_logs)
+          pay_object(logs)
 
 
 
@@ -190,7 +179,6 @@
 
 
   }
-  total_fee = 0
   main()
   // set_cookies("school_information",null)
 
@@ -203,13 +191,10 @@
       td1 = document.createElement("td")
       td2 = document.createElement("td")
       td3 = document.createElement("td")
+
       td1.innerText = fee_object[i].time
-      td2.innerHTML = fee_object[i].name+"<span style='color: green;'> （支払い済み）</span>"
-      if (fee_object[i].status===0){
-        td2.innerHTML = fee_object[i].name+`<span style='color: red;'>(未払いです) </span><a href='../../sse/school/pay.html?payment=${i}'>入料</a>`
-      }
-      total_fee += fee_object[i].price
-      td3.innerText = fee_object[i].price.toFixed(1)+"円"
+      td2.innerHTML = `<span style="color: ${fee_object[i].color}">${fee_object[i].name}</span>`
+      td3.innerHTML = `<span style="color: ${fee_object[i].color}">${fee_object[i].detail}</span>`
       tr.append(td1)
       tr.append(td2)
       tr.append(td3)
@@ -218,7 +203,6 @@
     }
 
     $(".pay_list").append(tbody)
-    $(".fee_total").html(total_fee.toFixed(1)+"円")
   }
 
 </script>

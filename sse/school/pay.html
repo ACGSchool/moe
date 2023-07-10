@@ -90,15 +90,11 @@
   books_arr = []
   total_fee = 0
   var type
+  var sci
   var paymentpay=false
   var canPay = true
   var books
-  fee_logs = get_cookies("fee_logs")
-  if (!is_exist_cookies(fee_logs)){
-    fee_logs = []
-  }else{
-    fee_logs = JSON.parse(fee_logs)
-  }
+  fee_logs = load_data_by_arr("fee_logs")
   books_total_fee = 0
   function free_pay(){
     if (canPay==false){
@@ -119,22 +115,21 @@
       if (day<10){
         day = "0"+day
       }
+
       fee_logs.push({"name":"书费","price":books_total_fee,"time":now.getFullYear()+"-"+moth+"-"+day,"status":1})
 
     }
     if (paymentpay===true){
       fee_logs[payment].status = 1
-      set_cookies("fee_logs",fee_logs)
+      add_logs("费用支付","为"+fee_logs[payment].name+"支付"+fee_logs[payment].price.toFixed(1)+"日元")
+      // set_cookies("fee_logs",fee_logs)
     }
 
-
-
-
-
-    set_cookies("fee_logs",fee_logs)
+    set_data("fee_logs",fee_logs)
 
     alert("您的项目已支付成功，由政府补助")
     if (type==="books") {
+      add_logs("费用支付",`支付${sci.name}的书款 ${books_total_fee.toFixed(1)}日元`,"green")
       window.location = "../../sse/school/books.html"
     }
     if (paymentpay){
@@ -166,12 +161,8 @@
           payment = parseInt(payment)
           if (payment>=0){
 
-            fee_logs = get_cookies("fee_logs")
-            if (is_exist_cookies(fee_logs)){
-              fee_logs = JSON.parse(fee_logs)
-            }else{
-              fee_logs = []
-            }
+            fee_logs = load_data_by_arr("fee_logs")
+
             if (payment>=fee_logs.length){
               return;
             }

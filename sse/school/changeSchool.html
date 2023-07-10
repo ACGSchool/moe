@@ -49,7 +49,7 @@
         <h4>
           请选择要转入的学校
         </h4>
-        <select required="" class="form-control" id="schoolList" width="50%">
+        <select required="" class="form-control" id="schoolList" width="100%">
           <option disabled="" selected="">请选择需要转入的学校</option>
         </select>
         <br>
@@ -204,6 +204,7 @@
   }
 
   function submit_transfer_question(direct=false){
+    school_name = $("#schoolList").val()
     if (!direct){
       right = false
       //验证答案
@@ -223,6 +224,7 @@
 
       }
       if (!right){
+        add_logs("招生审核",`你未能通过${school_name}的转校测试`,"red")
         alert("答案错误，转校失败")
         location.reload()
         return;
@@ -231,7 +233,7 @@
 
     //计算转校概率
     base_rate = 100
-    school_name = $("#schoolList").val()
+
     new_school_info = window.data[school_name]
     transfer_rate = get_transfer_rate(school_name)
     randoms = parseInt(Math.floor(Math.random()*base_rate+1))
@@ -261,9 +263,13 @@
         "type":new_school_info.type
       }
       set_cookies("school_information",school_information_json)
+      add_logs("学生会",`[${school_information.name}通知]你的学籍已从本校成功转入${school_name}！`,"green")
+      add_logs("学生会",`[${school_name}通知]你的转校申请已通过，学籍已接收！`,"brown")
       alert("恭喜你，你已成功转入"+$("#schoolList").val())
+
       location.reload()
     }else{
+      add_logs("招生审核",`因竞争激烈你未能转入${school_name}`,"orange")
       alert("由于一些因素您的转校未被允许，请重试!")
       location.reload()
     }
@@ -307,6 +313,7 @@
       question_type = question.type
     }else{
       // 直接计算转校概率
+      submit_transfer_question(true)
     }
 
   }
@@ -316,15 +323,10 @@
       if (result){
         personal_information = get_cookies("personal_information")
 
-        fee_logs = get_cookies("fee_logs")
         apply_list = get_cookies("apply_list")
-
         clearAllCookie()
         if (is_exist_cookies(personal_information)){
           set_cookies("personal_information",JSON.parse(personal_information))
-        }
-        if (is_exist_cookies(fee_logs)){
-          set_cookies("fee_logs",JSON.parse(fee_logs))
         }
         if (is_exist_cookies(apply_list)){
           apply_list = JSON.parse(apply_list)
@@ -336,6 +338,7 @@
           }
           set_cookies("apply_list",apply_list)
         }
+        add_logs("学生会",`[${scil.name}通知]退学申请已被通过！`,"green")
         add_fees("从"+scil.name+"退学的人工服务费",random_range_floor(100,500))
         alert("您已从"+scil.name+"退学")
       }
@@ -345,33 +348,6 @@
 
 
 
-  function accept_offer(name){
-    let result = confirm("您确定要接受"+name+"的录取去向吗？\nPS:你只能接受一个录取，如需更换请申请转学")
-    if (result===true){
-      sci = window.data[name]
-      if (sci===undefined){
-        sci = {}
-      }
-      school_information_json = {
-        "rank":sci.rank,
-        "name":name,
-        "detail":sci.introduce,
-        "type":sci.type
-      }
-      for (let i=0;i<window.apply_list.length;i++){
-        if (window.apply_list[i].name===name){
-          window.apply_list[i].status = 2
-        }else{
-          if (window.apply_list[i].status===2){
-            window.apply_list[i].status = 1
-          }
-        }
-      }
-      set_cookies("school_information",school_information_json)
-      set_cookies("apply_list",window.apply_list)
-      alert("恭喜成为"+name+"的学生，请到学校服务获取更多帮助")
-    }
-  }
 
   function get_transfer_rate(){
     select_school = window.data[schoolname]

@@ -59,6 +59,7 @@
 
 <script>
   var stt_num = 10
+  var school_information
   function main(){
     new Promise(function (resolve){
       render_all(resolve)
@@ -138,8 +139,14 @@
         return alert("个人信息不存在")
       }
       personal_information = JSON.parse(personal_information)
+      if (personal_information['stt']!==undefined){
+        add_logs("学校服务",`成功将${school_information.name}的${personal_information['stt']}号课表修改为${name}号课表`,"green")
+      }else{
+        add_logs("学校服务",`成功注册${school_information.name}的${name}号课表`,"green")
+      }
       personal_information['stt'] = name
       set_cookies("personal_information",personal_information)
+
       alert("恭喜，您已注册本课表")
       location.reload()
     }

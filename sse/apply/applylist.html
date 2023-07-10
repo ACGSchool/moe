@@ -175,6 +175,7 @@
       set_cookies("school_information",school_information_json)
       set_cookies("apply_list",window.apply_list)
       add_fees(name+"入学处理费",random_range_floor(1000,5000))
+      add_logs("接受入学","接受入学并成为"+name+"的生徒","green")
       alert("恭喜成为"+name+"的学生，请到学校服务获取更多帮助")
       location.reload()
     }
