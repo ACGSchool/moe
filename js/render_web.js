@@ -58,6 +58,21 @@ function get_day(){
     }
     return now.getFullYear()+"-"+moth+"-"+day;
 }
+function clear_all_school_information(){
+    fee_logs = get_cookies("fee_logs")
+    apply_list = get_cookies("apply_list")
+    personal_information = get_cookies("personal_information")
+    clearAllCookie()
+    if (is_exist_cookies(personal_information)){
+        set_cookies("personal_information",JSON.parse(personal_information))
+    }
+    if (is_exist_cookies(fee_logs)){
+        set_cookies("fee_logs",JSON.parse(fee_logs))
+    }
+    if (is_exist_cookies(apply_list)){
+        set_cookies("apply_list",JSON.parse(apply_list))
+    }
+}
 function add_fees(name,price){
     fee_logs = get_cookies("fee_logs")
     if (!is_exist_cookies(fee_logs)){
@@ -81,6 +96,15 @@ function load_cookies(key){
     datas = get_cookies(key)
     if (!is_exist_cookies(datas)){
         datas = {}
+    }else{
+        datas = JSON.parse(datas)
+    }
+    return datas
+}
+function load_cookies_by_arr(key){
+    datas = get_cookies(key)
+    if (!is_exist_cookies(datas)){
+        datas = []
     }else{
         datas = JSON.parse(datas)
     }

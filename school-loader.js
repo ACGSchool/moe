@@ -1,3 +1,5 @@
+
+
 function open_school_list(){
     fetch("schools.json?" + String(Date.parse(new Date()))).then(res => {
         if (res.status == 200) {

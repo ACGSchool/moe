@@ -33,7 +33,31 @@
 
 
     </div>
+    <div class="test_question hidden" style="z-index:10000;display: flex;width: 100%;justify-content: center;align-items: center;position:fixed;left: 0;">
+      <div class="input-group mb-3" style="width: 300px;border: #ffc0cb 3px solid;padding: 30px;background: white;">
+        <h4>
+          请完成转校测试题
+        </h4>
+        <div class="test_question_layer"></div>
+        <p style="width: 100%;margin-top: 10px;margin-bottom: 0;text-align: right"><a href="#" onclick="$('.test_question').addClass('hidden')">取消</a>|<a href="#" onclick="submit_transfer_question()">确定</a></p>
+      </div>
 
+    </div>
+
+    <div class="hidden choose_school" style="display: flex;width: 100%;justify-content: center;align-items: center;position:fixed;left: 0;">
+      <div class="input-group mb-3" style="width: 300px;border: #ffc0cb 3px solid;padding: 30px;background: white;">
+        <h4>
+          请选择要转入的学校
+        </h4>
+        <select required="" class="form-control" id="schoolList" width="50%">
+          <option disabled="" selected="">请选择需要转入的学校</option>
+        </select>
+        <br>
+        <p style="width: 100%;margin-top: 10px;margin-bottom: 0;">转入难度:<span class="level"></span></p>
+        <p style="width: 100%;margin-top: 10px;margin-bottom: 0;text-align: right"><a href="#" onclick="hidden_choose()">取消</a>|<a href="#" onclick="transfer_school_eval()">确定</a></p>
+      </div>
+
+    </div>
 
 
   </div>
@@ -56,7 +80,11 @@
 <link rel="stylesheet" href="../../css/toast.css">
 
 <script>
+  successing_school = []
   scil = load_cookies("school_information")
+  function hidden_choose(){
+    $(".choose_school").addClass("hidden")
+  }
 
   function main(){
     new Promise(function (resolve){
@@ -87,6 +115,9 @@
           td1.innerHTML = apply_list[i].name
 
           td2.innerHTML = schoolI.type
+          if (apply_list[i].status!==2){
+            continue;
+          }
           if (apply_list[i].status===0){
             stat = "<span style='color: red;'>未录取</span>"
             buttonforapply = "<span style='color: grey;'>未录取禁止操作</span>"
@@ -100,7 +131,7 @@
             }
           }else if (apply_list[i].status===2){
             stat = "<span style='color: darkgreen;'>已录取并接受</span>"
-            buttonforapply = "<span><a>转学</a>|<a href='#' onclick='cancel_school()'>退学</a></span>"
+            buttonforapply = "<span><a href='#' onclick='transform_school()'>转学</a>|<a href='#' onclick='cancel_school()'>退学</a></span>"
           }
 
 
@@ -118,6 +149,33 @@
         }
         $(".applylist").append(tbody)
 
+        //渲染列表
+
+        for (var kd in apply_list){
+          if (apply_list[kd].status===1){
+            successing_school.push(apply_list[kd].name)
+          }
+        }
+
+        for(let i in data){
+          if (i === scil.name){
+            continue;
+          }
+          if (successing_school.indexOf(i)!==-1){
+            $("#schoolList").append(`<option value="${i}">${i}(已录取)</option>`)
+          }else{
+            $("#schoolList").append(`<option value="${i}">${i}</option>`)
+          }
+
+
+        }
+
+
+
+
+
+
+
       })
     })
 
@@ -132,10 +190,126 @@
 
 
 
+
+
   }
   main()
   // set_cookies("school_information",null)
+  function transform_school(){
+    $(".choose_school").removeClass("hidden")
+  }
+  question_type = ""
+  function transfer_school_question(){
 
+  }
+
+  function submit_transfer_question(direct=false){
+    if (!direct){
+      right = false
+      //验证答案
+      if (question_type==="common"){
+        for (let j=0;j<question.answer.length;j++){
+          if (question.answer[j]===$("#questions").val()){
+            right = true
+          }
+        }
+
+      }
+
+      if (question_type==="choices"){
+        if (question.answer===parseInt($("#questions").val())){
+          right = true
+        }
+
+      }
+      if (!right){
+        alert("答案错误，转校失败")
+        location.reload()
+        return;
+      }
+    }
+
+    //计算转校概率
+    base_rate = 100
+    school_name = $("#schoolList").val()
+    new_school_info = window.data[school_name]
+    transfer_rate = get_transfer_rate(school_name)
+    randoms = parseInt(Math.floor(Math.random()*base_rate+1))
+    if (randoms<=parseInt(base_rate*transfer_rate)||successing_school.indexOf(school_name)!==-1){
+      $(".test_question").addClass("hidden")
+      school_information = load_cookies("school_information")
+      clear_all_school_information()
+      apply_list = load_cookies_by_arr("apply_list")
+      for (var a in apply_list){
+        if (apply_list[a].name===school_information.name){
+          apply_list[a].status=3
+        }
+      }
+      schoolInfo_save = {
+        name:school_name,
+        status:2
+      }
+
+      apply_list.push(schoolInfo_save)
+
+
+      set_cookies("apply_list",apply_list)
+      school_information_json = {
+        "rank":new_school_info.rank,
+        "name":school_name,
+        "detail":new_school_info.introduce,
+        "type":new_school_info.type
+      }
+      set_cookies("school_information",school_information_json)
+      alert("恭喜你，你已成功转入"+$("#schoolList").val())
+      location.reload()
+    }else{
+      alert("由于一些因素您的转校未被允许，请重试!")
+      location.reload()
+    }
+
+
+
+  }
+  var question;
+  function transfer_school_eval(){
+    schoolname = $("#schoolList").val()
+    //已录取
+    transfer_rate = get_transfer_rate(schoolname)
+    school = window.data[schoolname]
+    if (school.questionnaire!==undefined){
+      $(".test_question").removeClass("hidden")
+      id=Math.floor(Math.random()*school.questionnaire.questions.length);
+      question = school.questionnaire.questions[id]
+      var html = $(".test_question_layer").html(" ")
+      if (question.type==="common"){
+        html.append(`<h5>${question.ask}</h5>`)
+        html.append(" <div class=\"input-group mb-3\">\n" +
+                "            <input required=\"\" type=\"text\" id=\"questions\" class=\"form-control\" placeholder=\"请输入答案\" aria-label=\"答案\" style=\"margin-right: 10px;\">\n" +
+                "        </div>")
+      }
+
+      if (question.type==="choices"){
+        html.append(`<h5>${question.ask}</h5>`)
+        html.append(" <div class=\"input-group mb-3\">\n")
+        html.append(`<select required="" class="form-control" id="questions">
+
+            </select>`)
+        $("#questions").append(`<option selected disabled value="-1">请选择答案</option>`)
+        for(let k=0;k<question.choices.length;k++){
+          $("#questions").append(`<option value="${k}">${question.choices[k]}</option>`)
+
+        }
+        html.append("</div>")
+      }
+      html.append("</div>")
+
+      question_type = question.type
+    }else{
+      // 直接计算转校概率
+    }
+
+  }
   function cancel_school(){
     if (scil.name!==undefined){
       let result = confirm("您确定要从"+scil.name+"退学吗？\nPS:退学后可重新申请或申请其他学校")
@@ -168,6 +342,9 @@
     }
 
   }
+
+
+
   function accept_offer(name){
     let result = confirm("您确定要接受"+name+"的录取去向吗？\nPS:你只能接受一个录取，如需更换请申请转学")
     if (result===true){
@@ -195,6 +372,41 @@
       alert("恭喜成为"+name+"的学生，请到学校服务获取更多帮助")
     }
   }
+
+  function get_transfer_rate(){
+    select_school = window.data[schoolname]
+    if (select_school===undefined){
+      select_school = {}
+    }
+    if (select_school.transfer!==undefined){
+      transfer_rate = select_school.transfer
+    }else{
+      transfer_rate = 0.2
+    }
+    return transfer_rate
+  }
+
+  $("body").on("change","#schoolList",function (){
+    schoolname = $("#schoolList").val()
+    //已录取
+    transfer_rate = get_transfer_rate(schoolname)
+    if (successing_school.indexOf(schoolname)!==-1){
+      $(".level").html("<span style='color: green'>已录取，可直接转入</span>")
+    }else if (transfer_rate<=0.05){
+      $(".level").html("<span style='color: darkred'>高</span>")
+    }else if (transfer_rate<=0.15){
+      $(".level").html("<span style='color: orange'>中</span>")
+    }else if (transfer_rate<=0.2){
+      $(".level").html("<span style='color: darkgreen'>低</span>")
+    }else{
+      $(".level").html("<span style='color: blue'>极低</span>")
+
+    }
+
+  })
+
+
+
 
 </script>
 </html>

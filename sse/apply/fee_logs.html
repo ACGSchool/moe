@@ -88,7 +88,7 @@
         <tfoot>
         <tr>
           <td colspan="2" class="total">总计</td>
-          <td class="total">0</td>
+          <td class="total fee_total">0</td>
         </tr>
         </tfoot>
       </table>
@@ -190,6 +190,7 @@
 
 
   }
+  total_fee = 0
   main()
   // set_cookies("school_information",null)
 
@@ -207,7 +208,7 @@
       if (fee_object[i].status===0){
         td2.innerHTML = fee_object[i].name+`<span style='color: red;'>(未払いです) </span><a href='../../sse/school/pay.html?payment=${i}'>入料</a>`
       }
-
+      total_fee += fee_object[i].price
       td3.innerText = fee_object[i].price.toFixed(1)+"円"
       tr.append(td1)
       tr.append(td2)
@@ -217,7 +218,7 @@
     }
 
     $(".pay_list").append(tbody)
-
+    $(".fee_total").html(total_fee.toFixed(1)+"円")
   }
 
 </script>
