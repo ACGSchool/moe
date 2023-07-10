@@ -14,6 +14,7 @@
         "keywords": ["lovelive","ll","巨蛋","偶像"],
         "rank": 1,
         "require_books": 15,
+        "uniforms": [{"name": "夏季校服", "img": "https://pic6.58cdn.com.cn/nowater/webim/big/n_v29a4214daf76a4590b6ccc047bedeec30.png","price": 3500},{"name":"冬季校服","img": "https://pic5.58cdn.com.cn/nowater/webim/big/n_v297687d3a82b443b4b3b64b5445dd599d.png","price":3000}],
         "books": [
         "音乐A",
         "音乐B",

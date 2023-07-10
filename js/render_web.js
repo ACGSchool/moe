@@ -89,11 +89,6 @@ function clear_all_school_information(){
 }
 function add_fees(name,price){
     fee_logs = load_data_by_arr("fee_logs")
-    if (!is_exist_cookies(fee_logs)){
-        fee_logs = []
-    }else{
-        fee_logs = JSON.parse(fee_logs)
-    }
     fee_logs.unshift({"name":name,"price":price,"time":get_day(),"status":0})
     set_data("fee_logs",fee_logs)
 }
