@@ -21,7 +21,7 @@
       <div id="school-table" class="" style="overflow: auto;">
         <table class="table table-hover applylist" style="border: none;border-top: none;">
           <thead>
-          <tfoot>
+          <tfoot class="total_fee">
           <tr>
             <td colspan="2" class="total">总计</td>
             <td class="total fee_total">0</td>
@@ -68,6 +68,17 @@
 
 <script>
   var pay_list = []
+  var orderId = null
+  var preview_order = null
+  var shopping = load_data_by_arr("shopping")
+  function getParams(params,key){
+    if(params.has(key)){
+      return params.get(key)
+    }
+    return "underfined";
+
+
+  }
   var schoolName
   function main(){
     new Promise(function (resolve){
@@ -87,6 +98,7 @@
           alert("请先申请并录取后再征订书籍")
           return
         }
+
         sci = JSON.parse(sci)
         schoolName = sci.name
         school_informations = window.data[sci.name]
@@ -94,7 +106,36 @@
           alert("本校未开通校服征订服务")
           return;
         }
+        const urlparams = new URL(window.location.href).searchParams
+        orderId = getParams(urlparams, "order");
+        if (orderId!=="undefined"&&orderId.trim()!==""&&orderId!=="underfined"){
+          $(".pay_button").addClass("hidden")
+          $(".total_fee").addClass("hidden")
+          orderId = parseInt(orderId)
+          if (orderId>=shopping.length){
+            alert("订单号不存在")
+            return;
+          }else{
+            preview_order = shopping[orderId]['data']
+          }
+        }
+
+
+
         for (let i=0;i<school_informations.uniforms.length;i++){
+          if (preview_order!==null){
+            buy_this = false
+            shop_index = 0
+            for (let k=0;k<preview_order.length;k++){
+              if (preview_order[k].name===school_informations['uniforms'][i].name){
+                buy_this = true
+                shop_index = k
+              }
+            }
+            if (!buy_this){
+              continue;
+            }
+          }
           tr = document.createElement("tr")
           td1 = document.createElement("td")
           td2 = document.createElement("td")
@@ -103,7 +144,11 @@
           td1.innerHTML = school_informations['uniforms'][i].name
           td2.innerHTML = `<img height="300px" src="${school_informations['uniforms'][i].img}">`
           td3.innerHTML = school_informations['uniforms'][i].price
-          td4.innerHTML = "<input class='buying' type=\"number\" value=\"0\" min=\"0\" max=\"10\" step=\"1\"/>"
+          if (preview_order!==null){
+            td4.innerHTML = `<input class='buying' disabled type=\"number\" value=\"${preview_order[shop_index].total_item}\" min=\"0\" max=\"10\" step=\"1\"/>`
+          }else{
+            td4.innerHTML = "<input class='buying' type=\"number\" value=\"0\" min=\"0\" max=\"10\" step=\"1\"/>"
+          }
           // if (apply_list[i].status===0){
           //   stat = "<span style='color: red;'>未录取</span>"
           //   buttonforapply = "<span style='color: grey;'>未录取禁止操作</span>"
@@ -184,7 +229,6 @@
   main()
 
   function go_shop(){
-    shopping = load_data_by_arr("shopping")
     // call_back = load_data_by_arr("call_back")
     callbackId = hex_md5(Date.parse(new Date()).toString())
     console.log(callbackId)

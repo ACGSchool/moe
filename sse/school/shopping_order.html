@@ -25,6 +25,7 @@
             <th scope="col">订单日期</th>
             <th scope="col">订单详情</th>
             <th scope="col">购买状态</th>
+            <th scope="col">操作</th>
           </tr>
           </thead>
           </table></div>
@@ -77,49 +78,28 @@
           for(let j=0;j<shopping[i]['data'].length;j++){
             msg+=shopping[i]['data'][j]['name']+"*"+shopping[i]['data'][j]['total_item']+" "
           }
-          schoolname = apply_list[i].name
+          // schoolname = apply_list[i].name
           tr = document.createElement("tr")
           td1 = document.createElement("td")
           td2 = document.createElement("td")
           td3 = document.createElement("td")
+          td4 = document.createElement("td")
           td1.innerHTML = shopping[i]['data'][0]['data']
-
           td2.innerHTML = msg
           if (call_back.indexOf(shopping[i]['callback'])===-1){
             stat = "<span style='color: red;'>未付款</span>"
           }else{
             stat = "<span style='color: green;'>已付款</span>"
           }
-          // if (apply_list[i].status===0){
-          //   stat = "<span style='color: red;'>未录取</span>"
-          //   buttonforapply = "<span style='color: grey;'>未录取禁止操作</span>"
-          // }else if (apply_list[i].status===1){
-          //   stat = "<span style='color: green;'>已录取，等待接受</span>"
-          //
-          //
-          //   buttonforapply =` <a href="#"  onclick='accept_offer("${apply_list[i].name}")'>接受</a>|<a href='#' onclick='declined_offer("${apply_list[i].name}")'>拒绝</a>`
-          //   if (is_exist_cookies(scil)){
-          //     buttonforapply = "<span style='color: grey;'>已接受其他，无法接受</span>"
-          //   }
-          // }else if (apply_list[i].status===2){
-          //   stat = "<span style='color: darkgreen;'>已录取并接受</span>"
-          //   buttonforapply = "<span>已接受</span>"
-          // }else if(apply_list[i].status===-1){
-          //   stat = "<span style='color: grey;'>已拒绝录取</span>"
-          //   buttonforapply = "<span>已拒绝</span>"
-          // }else if(apply_list[i].status===3){
-          //   stat = "<span style='color: grey;'>已转校</span>"
-          //   buttonforapply = "<span>已转校</span>"
-          // }
-
 
 
           td3.innerHTML = stat
+          td4.innerHTML = `<a href='../../sse/school/shop.html?order=${i}'>查看订单</a>`
           // td4.innerHTML = buttonforapply
           tr.append(td1)
           tr.append(td2)
           tr.append(td3)
-          // tr.append(td4)
+          tr.append(td4)
           tbody.append(tr)
 
         }
