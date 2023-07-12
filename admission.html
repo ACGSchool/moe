@@ -587,8 +587,7 @@
           }
         }
       }
-      console.log(apply_percent*100)
-      if(random<=apply_percent*100){
+      if(random>apply_percent*100){
         template = $("#failed").html()
         $("#failed_message").text("很抱歉您未被"+schoolName+"录取")
         add_logs("招生审核","在"+schoolName+"的入学审核中失败，未被录取","red")
@@ -653,7 +652,7 @@
       $("#paper").html(template)
       $("#school_logo").attr("src",logo)
 
-      if (schoolIntroduce.questionnaire!==undefined && schoolIntroduce.questionnaire.questions.length!==0 && random>50){
+      if (schoolIntroduce.questionnaire!==undefined && schoolIntroduce.questionnaire.questions.length!==0){
 
       }else{
 
