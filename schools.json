@@ -69,6 +69,62 @@
       ]
     }
     },
+    "花咲川女子学园": {
+    "stt": [
+      "音乐学", "电子鼓学", "吉他学","键盘学","音乐","音乐","音乐","circle会议","合作演出","体育","算数","国语","几何","化学","情报学"
+    ],
+    "time": "",
+    "task": "香澄语100级",
+    "type": "顶尖艺校",
+    "transfer": 0.03,
+    "url": "",
+    "introduce":"",
+    "permission": 1,
+    "keywords": ["po","pi","pa","po","pi","pa","ki","ra","ki","ra","yeah","闪","亮"],
+    "rank": 2,
+    "require_books": 10,
+    "books": [
+      "演出A",
+      "音乐B",
+      "演出B",
+      "编曲B",
+      "编曲A"
+    ],
+    "questionnaire":{
+      "title": "花咲川女子学园入学受验1番",
+      "acc": 0.8,
+      "apply_percent": 0.6,
+      "subtitle": "欢迎参加本次入学考试",
+      "content": "xxxxxxxxx",
+      "questions": [
+        {
+          "ask": "香澄语：kirakira,_________",
+          "answer": [
+            "dokidoki",
+            "doki doki"
+          ],
+          "type": "common"
+        },
+        {
+          "ask": "练习场所是什么地方？（两个字）",
+          "answer": [
+            "仓库"
+          ],
+          "type": "common"
+        },
+        {
+          "ask": "谁是cdd？",
+          "choices": [
+            "户山香澄",
+            "户山明日香",
+            "花园多惠"
+          ],
+          "answer": 0,
+          "type": "choices"
+        }
+      ]
+    }
+  },
     "私立巡ヶ丘学院高等学校": {
         "time": "",
         "alias": "",
@@ -111,6 +167,14 @@
         "task": "须超能力者LV1",
         "type": "魔法学校",
         "url": "",
+        "books": [
+          "发电A",
+          "发电B",
+          "发电C",
+          "发电D",
+          "能力教育",
+          "能力提升"
+        ],
         "permission": 1
     },
      "天神小学校":{
