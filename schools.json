@@ -138,6 +138,7 @@
     "time": "",
     "task": "",
     "transfer": 0.15,
+    "uniforms": [{"name": "女子冬季校服", "img": "https://pic.rmb.bdstatic.com/bjh/user/2091f61f046e0edfaa3a057c469a5ebf4817.png","price": 2000},{"name":"男子冬季校服","img": "https://pic.rmb.bdstatic.com/bjh/user/d7c894f914ba10857aa13d259531a8bb558.png","price":5000},{"name":"男子夏季校服","img": "https://pic.rmb.bdstatic.com/bjh/user/3dd43b10efe204550f69337391a14c553462.png","price":1700},{"name":"女子夏季校服","img": "https://pic.rmb.bdstatic.com/bjh/user/12c63920a8f5ec50b32ac80a5e72ba8e1639.png","price":1500}],
     "type": "直属高等学校",
     "url": "",
     "logo": ""
