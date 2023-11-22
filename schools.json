@@ -14,7 +14,7 @@
         "keywords": ["lovelive","ll","巨蛋","偶像"],
         "rank": 1,
         "require_books": 15,
-        "uniforms": [{"name": "夏季校服", "img": "https://pic6.58cdn.com.cn/nowater/webim/big/n_v29a4214daf76a4590b6ccc047bedeec30.png","price": 3500},{"name":"冬季校服","img": "https://pic5.58cdn.com.cn/nowater/webim/big/n_v297687d3a82b443b4b3b64b5445dd599d.png","price":3000}],
+        "uniforms": [{"name": "夏季校服", "img": "https://pic.rmb.bdstatic.com/bjh/user/00b1446790e8d60f0afa87ee5372b3a96932.png","price": 3500},{"name":"冬季校服","img": "https://pic.rmb.bdstatic.com/bjh/user/9420309debbef0684f85f8718676ef642221.png","price":5000}],
         "books": [
         "音乐A",
         "音乐B",
@@ -138,6 +138,7 @@
     "time": "",
     "task": "",
     "transfer": 0.15,
+    "uniforms": [{"name": "女子冬季校服", "img": "https://pic.rmb.bdstatic.com/bjh/user/2091f61f046e0edfaa3a057c469a5ebf4817.png","price": 2000},{"name":"男子冬季校服","img": "https://pic.rmb.bdstatic.com/bjh/user/d7c894f914ba10857aa13d259531a8bb558.png","price":5000},{"name":"男子夏季校服","img": "https://pic.rmb.bdstatic.com/bjh/user/3dd43b10efe204550f69337391a14c553462.png","price":1700},{"name":"女子夏季校服","img": "https://pic.rmb.bdstatic.com/bjh/user/146d1cdc0f4b83077c9219aab550e8a98594.png","price":1500}],
     "type": "直属高等学校",
     "url": "",
     "logo": ""
