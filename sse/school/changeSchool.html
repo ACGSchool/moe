@@ -53,7 +53,8 @@
           <option disabled="" selected="">请选择需要转入的学校</option>
         </select>
         <br>
-        <p style="width: 100%;margin-top: 10px;margin-bottom: 0;">转入难度:<span class="level"></span></p>
+        <p class="text-for-difficult" style="width: 100%;margin-top: 10px;margin-bottom: 0;">转入难度:<span class="level"></span></p>
+        <p class="text-for-reason hidden" style="color: red;width: 100%;margin-top: 10px;margin-bottom: 0;">该学校不能转入！原因：<span class="reason"></span></p>
         <p style="width: 100%;margin-top: 10px;margin-bottom: 0;text-align: right"><a href="#" onclick="hidden_choose()">取消</a>|<a href="#" onclick="transfer_school_eval()">确定</a></p>
       </div>
 
@@ -262,6 +263,9 @@
         "detail":new_school_info.introduce,
         "type":new_school_info.type
       }
+      pi = JSON.parse(get_cookies("personal_information"))
+      pi['stt'] = undefined
+      set_cookies("personal_information",pi)
       set_cookies("school_information",school_information_json)
       add_logs("学生会",`[${school_information.name}通知]你的学籍已从本校成功转入${school_name}！`,"green")
       add_logs("学生会",`[${school_name}通知]你的转校申请已通过，学籍已接收！`,"brown")
@@ -280,6 +284,10 @@
   var question;
   function transfer_school_eval(){
     schoolname = $("#schoolList").val()
+    if (window.data[schoolname].closed===true){
+      window.alert("无法转入本学校！")
+      return location.reload()
+    }
     //已录取
     transfer_rate = get_transfer_rate(schoolname)
     school = window.data[schoolname]
@@ -322,7 +330,7 @@
       let result = confirm("您确定要从"+scil.name+"退学吗？\nPS:退学后可重新申请或申请其他学校")
       if (result){
         personal_information = get_cookies("personal_information")
-
+        personal_information.stt = undefined
         apply_list = get_cookies("apply_list")
         clearAllCookie()
         if (is_exist_cookies(personal_information)){
@@ -377,6 +385,20 @@
     }else{
       $(".level").html("<span style='color: blue'>极低</span>")
 
+    }
+
+    if (window.data[schoolname].closed){
+      if (!"info" in window.data[schoolname] || window.data[schoolname]===undefined){
+        reasons = "无"
+      }else{
+        reasons = window.data[schoolname].info
+      }
+      $(".reason").text(reasons)
+      $(".text-for-reason").removeClass("hidden")
+      $(".text-for-difficult").addClass("hidden")
+    }else{
+      $(".text-for-reason").addClass("hidden")
+      $(".text-for-difficult").removeClass("hidden")
     }
 
   })

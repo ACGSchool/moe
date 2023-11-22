@@ -18,8 +18,12 @@
   <div class="row render_menu">
     {{menu}}
     <div class="col-12 col-xl-9 col-sm-9">
-      <button onclick="window.location='shop.html'">购买物品</button>
-      <button onclick="window.location='shopping_order.html'">查看订单</button>
+      <p class="error_happend hidden" style="background: red;color: white;display: block;padding: 7px;"></p>
+
+      <div class="shop_panel">
+        <button onclick="window.location='shop.html'">购买物品</button>
+        <button onclick="window.location='shopping_order.html'">查看订单</button>
+      </div>
     </div>
 
 
@@ -55,9 +59,22 @@
     new Promise(function (resolve) {
       render_all(resolve)
     })
+
+    sci = get_cookies("school_information")
+    if (!is_exist_cookies(sci)){
+      error_happend("您未申请学校，请先申请学校</br>申请网址 <a style='color: white;' href='https://acg.school/apply.html'>https://acg.school/apply.html</a>")
+      return
+    }
   }
   main()
 
+  function error_happend(str){
+    $(".shop_panel").addClass("hidden")
+    $(".error_happend").html(str)
+    $(".error_happend").removeClass("hidden")
 
+  }
 </script>
+
+
 </html>

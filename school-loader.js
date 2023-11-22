@@ -15,7 +15,11 @@ function open_school_list(){
         for (let i in data) {
             let tr = document.createElement("tr");
             let th = document.createElement("th");
-            th.innerHTML = i;
+            if ("closed" in data[i] && data[i]['closed']===true){
+                th.innerHTML = `<span style="text-decoration: line-through;">${i}</span><span style="color: red;">(停止招生)</span>`;
+            }else{
+                th.innerHTML = `<span>${i}</span>`;
+            }
             th.scope = "row";
             tr.appendChild(th);
             for (let j in data[i]) {

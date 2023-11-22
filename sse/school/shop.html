@@ -19,6 +19,7 @@
     {{menu}}
     <div class="col-12 col-xl-9 col-sm-9">
       <div id="school-table" class="" style="overflow: auto;">
+        <p class="error_happend hidden" style="background: red;color: white;display: block;padding: 7px;"></p>
         <table class="table table-hover applylist" style="border: none;border-top: none;">
           <thead>
           <tfoot class="total_fee">
@@ -95,7 +96,7 @@
       }).then(data=>{
         sci = get_cookies("school_information")
         if (!is_exist_cookies(sci)){
-          alert("请先申请并录取后再征订书籍")
+          error_happend("您未申请学校，请先申请学校</br>申请网址 <a style='color: white;' href='https://acg.school/apply.html'>https://acg.school/apply.html</a>")
           return
         }
 
@@ -103,7 +104,7 @@
         schoolName = sci.name
         school_informations = window.data[sci.name]
         if (school_informations.uniforms===undefined){
-          alert("本校未开通校服征订服务")
+          error_happend("本校未开通校服征订服务")
           return;
         }
         const urlparams = new URL(window.location.href).searchParams
@@ -227,7 +228,13 @@
 
   })
   main()
+  function error_happend(str){
+    $(".applylist").addClass("hidden")
+    $(".pay_button").addClass("hidden")
+    $(".error_happend").html(str)
+    $(".error_happend").removeClass("hidden")
 
+  }
   function go_shop(){
     // call_back = load_data_by_arr("call_back")
     callbackId = hex_md5(Date.parse(new Date()).toString())
