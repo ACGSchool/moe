@@ -17,7 +17,7 @@
 <div class="container" style="margin-top: 10px;max-width: 1200px!important;">
   <div class="row render_menu">
     {{menu}}
-    <div class="col-12 col-xl-9 col-sm-9">
+    <div class="col-12 col-xl-9 col-sm-9" id="content">
       <div id="school-table" class="" style="overflow: auto;">
         <table class="table table-hover applylist">
           <thead>
@@ -60,6 +60,9 @@
     new Promise(function (resolve){
       render_all(resolve)
     }).then(()=>{
+      if (checkUserRegister()){
+        return;
+      }
       fetch("/schools.json?" + String(Date.parse(new Date()))).then(res => {
         if (res.status == 200) {
           return res.json();

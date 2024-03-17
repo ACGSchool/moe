@@ -16,7 +16,7 @@
 <div class="container" style="margin-top: 10px;max-width: 1200px!important;">
   <div class="row render_menu">
     {{menu}}
-    <div class="col-12 col-xl-9 col-sm-9">
+    <div class="col-12 col-xl-9 col-sm-9" id="content">
 
       <div class="bg_new">
         <div class="notices studentInfo">
@@ -66,54 +66,58 @@
 <script src="../../bootstrap.min.js"></script>
 <script src="../../js/render_web.js"></script>
 <script>
-  personal_information = get_cookies("personal_information")
-  school_information = get_cookies("school_information")
-  if (!is_exist_cookies(personal_information)){
-    alert("个人信息不完整，请先申请学校")
-    personal_information = {}
-  }
-  if (!is_exist_cookies(school_information)){
-    school_information = {}
-    entry_school = "<span style='color: red;'>(暂未入学)</span>"
-  }else{
-    entry_school = "<span style='color: green;'>(已入学)</span>"
-  }
-  try {
-    school_information = JSON.parse(school_information)
-  }catch (e){
-
-  }
-  personal_information = JSON.parse(personal_information)
-
-  if (parseInt(personal_information.gender)===0){
-    personal_information.gender = "女"
-  }else{
-    personal_information.gender = "男"
-  }
-  personal_information_json = {
-    "studentName":personal_information.name,
-    "studentGender":personal_information.gender,
-    "reason":personal_information.reason,
-    "grade":personal_information.grade,
-    "group":personal_information.group,
-    "studentId":personal_information.studentId,
-    "testId":personal_information.testId
-  }
-
-  school_information_json = {
-    "rank":school_information.rank,
-    "name":school_information.name,
-    "detail":school_information.detail,
-    "type":school_information.type,
-    "entry":entry_school
-  }
-  if (school_information.name===undefined){
-    personal_information_json["studentId"] = "未入学，隐藏"
-    personal_information_json["group"] = "未入学，隐藏"
-    personal_information_json["grade"] = "未入学，隐藏"
-  }
   new Promise(function (resolve){
     render_all(resolve)
+  }).then(()=>{
+    if (checkUserRegister() || checkRegister()){
+      return;
+    }
+    // personal_information = get_cookies("personal_information")
+    // school_information = get_cookies("school_information")
+    // if (!is_exist_cookies(personal_information)){
+    //   alert("个人信息不完整，请先申请学校")
+    //   personal_information = {}
+    // }
+    if (!is_exist_cookies(school_information)){
+      school_information = {}
+      entry_school = "<span style='color: red;'>(暂未入学)</span>"
+    }else{
+      entry_school = "<span style='color: green;'>(已入学)</span>"
+    }
+    try {
+      school_information = JSON.parse(school_information)
+    }catch (e){
+
+    }
+    personal_information = JSON.parse(personal_information)
+
+    if (parseInt(personal_information.gender)===0){
+      personal_information.gender = "女"
+    }else{
+      personal_information.gender = "男"
+    }
+    personal_information_json = {
+      "studentName":personal_information.name,
+      "studentGender":personal_information.gender,
+      "reason":personal_information.reason,
+      "grade":personal_information.grade,
+      "group":personal_information.group,
+      "studentId":personal_information.studentId,
+      "testId":personal_information.testId
+    }
+
+    school_information_json = {
+      "rank":school_information.rank,
+      "name":school_information.name,
+      "detail":school_information.detail,
+      "type":school_information.type,
+      "entry":entry_school
+    }
+    if (school_information.name===undefined){
+      personal_information_json["studentId"] = "未入学，隐藏"
+      personal_information_json["group"] = "未入学，隐藏"
+      personal_information_json["grade"] = "未入学，隐藏"
+    }
   }).then(()=>{
     render_templete(personal_information_json,".studentInfo")
     render_templete(school_information_json,".schoolInfo")

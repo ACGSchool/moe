@@ -1,4 +1,7 @@
 async function render_all(resolve=null){
+    script = document.createElement("script")
+    script.src = "../../js/utils.js"
+    document.body.insertAdjacentElement("afterbegin", script)
     var temp = document.body.innerHTML
     Promise.resolve().then(()=>{
         temp = document.body.innerHTML
